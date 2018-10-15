@@ -7,6 +7,7 @@ import pandas as pd
 import time
 import matplotlib as plt
 
+#　カウント用の初期パラメータ
 dlm_c = 0
 dlh_c = 0
 dld_c = 0
@@ -21,15 +22,15 @@ next_hour = now.hour + 1
 next_month = now.month + 1
 next_year = now.year + 1
 
-# monitering delta time
-ds = 30
+#　取得タイミングの設定。dm：30min毎 
 dm = 30
-# num = Times / hour
-num_m = 30#int(dm*60/ds)
-num_h = 48#int(24*60/dm)
+
+#　ログ数
+num_m = 30
+num_h = 48
 num_d = 31
 
-#DATA LOG MINUTE (dlm) DF 
+#　30分間のログ用データフレーム
 wtemp_log_m = np.zeros(num_m)
 rtemp_log_m = np.zeros(num_m)
 humid_log_m = np.zeros(num_m)
@@ -45,7 +46,7 @@ dlm = pd.DataFrame({
 })
 
 
-#DATA LOG MINUT (dlh) DF 
+#　30分毎のログ用データフレーム 
 wtemp_log_h = np.zeros(num_h)
 rtemp_log_h = np.zeros(num_h)
 humid_log_h = np.zeros(num_h)
@@ -60,7 +61,7 @@ dlh = pd.DataFrame({
 })
 
 
-#DATA LOG  HOUR (dld) DF 
+#　1日毎のログ用データフレーム 
 wtemp_log_d = np.zeros(num_d)
 rtemp_log_d = np.zeros(num_d)
 humid_log_d = np.zeros(num_d)
@@ -76,6 +77,7 @@ dld = pd.DataFrame({
 
 print "START MONITERING!!"
 
+#　端末での水温、室温、湿度、気圧の表示用
 def print_date(wtemp,temp,humid,press):
     print "###########################"
 
@@ -85,6 +87,7 @@ def print_date(wtemp,temp,humid,press):
     print "Humidity:"+str(round(humid,1))+"%"
     print "Pressure:"+str(round(press,1))+"hPa"
 
+#　データ書き込み　m：分、h：時間、d：日
 def df_write(d_name,gyo,a,wtemp,temp,humid,press):
     df = d_name
     if a == 'm':
@@ -102,6 +105,7 @@ def df_write(d_name,gyo,a,wtemp,temp,humid,press):
     df.iloc[gyo,3] = round(humid,1)
     df.iloc[gyo,4] = round(press,1)
 
+#　データフレーム内の平均値計算
 def df_ave(d_name):
     df = d_name
 
@@ -112,6 +116,7 @@ def df_ave(d_name):
     press_ave = round(df_means["5_Pressure"],1)
     return wtemp_ave, temp_ave, humid_ave, press_ave
 
+#　データフレームの初期化：分
 def initialize_dlm():
     wtemp_log_m = np.zeros(num_m)
     rtemp_log_m = np.zeros(num_m)
@@ -128,6 +133,7 @@ def initialize_dlm():
     })
     return dlm
 
+#　データフレームの初期化：時
 def initialize_dlh():
     wtemp_log_h = np.zeros(num_h)
     rtemp_log_h = np.zeros(num_h)
@@ -143,6 +149,7 @@ def initialize_dlh():
     })
     return dlh
 
+#　データフレームの初期化：日
 def initialize_dld():
     wtemp_log_d = np.zeros(num_d)
     rtemp_log_d = np.zeros(num_d)
@@ -158,7 +165,7 @@ def initialize_dld():
     })
     return dld
 
-#reload
+#　再起動時のデータ読み込み
 try:
     day = now.day
     month = now.month
@@ -171,8 +178,9 @@ try:
 except:
     pass
 
+#　メイン
 while  True:
-    #date
+    #日時取得
     now = datetime.datetime.now()
     sec = now.second
     min = now.minute
@@ -181,14 +189,15 @@ while  True:
     month = now.month
     year = now.year
     
-    
-    if sec == ds:
+    #　1分毎のデータログ
+    if sec == 30:
         wtemp = DS18B20.main() 
         temp, humid, press = bme.Bme280(0x76, 1).get_data()
         lcd.bme(wtemp,temp,humid,press)
         df_write(dlm,gyo_m,'m',wtemp,temp,humid,press)
         gyo_m += 1
-    
+
+        #　30分毎のデータログ
         if min == 0 or min == 30:
             dlm_a = df_ave(dlm)
             df_write(dlh,gyo_h,'h',dlm_a[0],dlm_a[1],dlm_a[2], dlm_a[3])
@@ -198,7 +207,8 @@ while  True:
             gyo_m = 0
             gyo_h += 1
             dlm = initialize_dlm()
-
+            
+            #　1日毎のデータログ
             if day == next_day:
                 dlh_a = df_ave(dlh)
                 df_write(dld,gyo_d,'d',dlh_a[0],dlh_a[1],dlh_a[2], dlh_a[3])
@@ -211,7 +221,8 @@ while  True:
                 next_day = day + 1
                 if month == next_month:
                     next_day = 1
-
+                    
+                    #　1ヶ月のデータログ
                     if month == next_month:
                         print "LOG DATA SAVE during Month("+str(year)+"_"+str(month)+"_date_log.csv)"
                         dld.to_csv("./"+str(year)+"_"+str(month)+"_date_log.csv", index=False)
