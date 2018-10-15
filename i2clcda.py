@@ -74,13 +74,14 @@ def lcd_string(message,line):
   for i in range(LCD_WIDTH):
     lcd_byte(ord(message[i]),LCD_CHR)
 
+#水温、気温、湿度及び気圧の出力設定
 def bme(wtemp,temp,humid,press):
   # Main program block
 
   # Initialise display
   lcd_init()
   
-  # Send some test
+  # 表示
   lcd_string("Water Temp:"+str(round(wtemp,1))+"C",LCD_LINE_1)
   lcd_string("Room Temp:"+str(round(temp,1))+"C",LCD_LINE_2)
   lcd_string("Humid:"+str(round(humid,1))+"%",LCD_LINE_3)
@@ -92,7 +93,7 @@ def main():
   # Initialise display
   lcd_init()
 
-  # Send some test
+  #　表示
   lcd_string("Water Temp:",LCD_LINE_1)
   lcd_string("Room Temp:",LCD_LINE_2)
   lcd_string("Humid:",LCD_LINE_3)
