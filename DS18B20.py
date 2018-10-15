@@ -1,7 +1,7 @@
 import sys
 import subprocess
 
-#Constant
+#自分の状況に合わせてSENSOR_IDを変更
 SENSOR_ID = "28-0213134f0faa"
 SENSOR_W1_SLAVE = "/sys/bus/w1/devices/" + SENSOR_ID + "/w1_slave"
 
