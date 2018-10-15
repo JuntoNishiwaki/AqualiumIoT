@@ -11,9 +11,6 @@ def main():
         wtemp = res.split("=")
         wtemp = round(float(wtemp[-1]) / 1000, 1)
         return wtemp
-    else:
-        print "cannot read the value."
-        sys.exit(1)
 
 def get_water_temp():
   try:
