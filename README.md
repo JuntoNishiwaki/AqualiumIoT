@@ -17,7 +17,7 @@
 
 *・DS18B20.py*
 
-    水温取得のためスクリプトです。 [DS18B20][1]の使用を前提としています。amazonで購入できます。
+    水温取得のためスクリプトです。 [DS18B20][1]の使用を前提としています。amazonで購入できます。参考HP：https://www.taneyats.com/entry/raspi-smart-aquarium-2
 
 [1]:https://www.amazon.co.jp/gp/product/B01DCY9G0K/ref=as_li_qf_asin_il_tl?ie=UTF8&tag=junto918-22&creative=1211&linkCode=as2&creativeASIN=B01DCY9G0K&linkId=d63da8cc97cbcdef0137f46d14494234
 
