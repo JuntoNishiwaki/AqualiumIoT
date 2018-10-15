@@ -8,7 +8,6 @@ import DS18B20
 import numpy as np
 import pandas as pd
 import time
-import matplotlib as plt
 
 #　カウント用の初期パラメータ
 dlm_c = 0
@@ -179,6 +178,7 @@ try:
     print "Reload date log!"
     
 except:
+    print "No date exist"
     pass
 
 #　メイン
