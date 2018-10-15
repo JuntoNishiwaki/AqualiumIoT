@@ -93,7 +93,7 @@ def main():
   # Initialise display
   lcd_init()
 
-  #　表示
+  #表示
   lcd_string("Water Temp:",LCD_LINE_1)
   lcd_string("Room Temp:",LCD_LINE_2)
   lcd_string("Humid:",LCD_LINE_3)
