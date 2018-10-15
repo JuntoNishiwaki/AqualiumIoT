@@ -164,8 +164,8 @@ while True:
     year = now.year
     
     fn_h = str(month)+"_"+str(day)+"_date_log.csv"
-    fn_h1 = str(month)+"_"+str(day)+"_date_log_h"
     fn_d = str(month)+"_"+"date_log.csv"
+    fn_h1 = str(month)+"_"+str(day)+"_date_log_h"
     fn_d1 = str(month)+"_date_log_d"
     
     if min == 0 or min == 30:
@@ -174,8 +174,8 @@ while True:
         print "Graph(Hour) save"
         graph(fn_h,"h",fn_h1)
 
-        #For upload
-        #graph(fn_h,"h","/var/www/html/img/data_log_h")
+        #HPのグラフ更新用。不要な場合はコメントアウト
+        graph(fn_h,"h","/var/www/html/img/data_log_h")
     
     if day == next_day:      
         #For save
@@ -183,8 +183,8 @@ while True:
         print "Graph(Day) save"
         graph(fn_d,"d",fn_d1)
     
-        #For upload
-        #graph(fn_d,"d","/var/www/html/img/data_log_d")
+        #HPのグラフ更新用。不要な場合はコメントアウト
+        graph(fn_d,"d","/var/www/html/img/data_log_d")
         
         next_day += 1
 
