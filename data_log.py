@@ -8,6 +8,7 @@ import DS18B20
 import numpy as np
 import pandas as pd
 import time
+import picamera
 
 #　カウント用の初期パラメータ
 dlm_c = 0
@@ -199,6 +200,13 @@ while  True:
         lcd.bme(wtemp,temp,humid,press)
         df_write(dlm,gyo_m,'m',wtemp,temp,humid,press)
         gyo_m += 1
+        #ライブカメラ制御
+        with picamera.PiCamera() as camera:
+            camera.resolution = (1024, 768)
+            camera.start_preview()
+            # 遅延
+            time.sleep(5)
+            camera.capture('/var/www/html/img/live.jpg')
 
         #　30分毎のデータログ
         if min == 0 or min == 30:

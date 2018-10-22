@@ -1,5 +1,6 @@
 # coding: UTF-8
-from picamera import PiCamera
+
+
 from time import sleep
 
 camera = PiCamera()
@@ -11,7 +12,9 @@ camera.start_preview()
 sleep(10)
 
 #画像を収録して保存
-camera.capture('/home/pi/script/camera/image.jpg')
+camera.capture('/var/www/html/img/live.jpg')
 
 #カメラが画像の取得を停止する
 camera.stop_preview()
+
+sleep(1)
