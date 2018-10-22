@@ -202,7 +202,7 @@ while  True:
         gyo_m += 1
         #ライブカメラ制御
         with picamera.PiCamera() as camera:
-            camera.resolution = (1024, 768)
+            camera.resolution = (800, 600)
             camera.start_preview()
             # 遅延
             time.sleep(5)
