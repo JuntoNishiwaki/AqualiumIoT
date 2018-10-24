@@ -200,6 +200,7 @@ while  True:
         lcd.bme(wtemp,temp,humid,press)
         df_write(dlm,gyo_m,'m',wtemp,temp,humid,press)
         gyo_m += 1
+
         #ライブカメラ制御
         with picamera.PiCamera() as camera:
             camera.resolution = (800, 600)
@@ -207,6 +208,9 @@ while  True:
             # 遅延
             time.sleep(5)
             camera.capture('/var/www/html/img/live.jpg')
+            if min == 0 and hour == 22:
+                file_name = str(month)+'_'+str(day)
+                camera.capture('/home/pi/img/'+file_name+'.jpg')
 
         #　30分毎のデータログ
         if min == 0 or min == 30:
