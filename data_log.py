@@ -194,8 +194,6 @@ while  True:
             day = now.day
             month = now.month
             year = now.year
-            
-            next_month = 11
 
             #　1ヶ月のデータログ
             if month == next_month:
