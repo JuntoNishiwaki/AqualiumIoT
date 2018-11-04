@@ -195,6 +195,18 @@ while  True:
             month = now.month
             year = now.year
             
+            next_month = 11
+
+            #　1ヶ月のデータログ
+            if month == next_month:
+                print "LOG DATA SAVE during Month("+str(year)+"_"+str(month)+"_date_log.csv)"
+                dld.to_csv("./"+str(year)+"_"+str(month)+"_date_log.csv", index=False)
+                gyo_d = 0
+                dld = initialize_dld()
+                next_month += 1
+                if next_month == 13:
+                    next_month = 1
+
             #　1分毎のデータログ
             if sec == 30:
                 wtemp = DS18B20.main() 
@@ -236,18 +248,6 @@ while  True:
                         gyo_d += 1
                         dlh = initialize_dlh()
                         next_day = day + 1
-                        if month == next_month:
-                            next_day = 1
-                            
-                            #　1ヶ月のデータログ
-                            if month == next_month:
-                                print "LOG DATA SAVE during Month("+str(year)+"_"+str(month)+"_date_log.csv)"
-                                dld.to_csv("./"+str(year)+"_"+str(month)+"_date_log.csv", index=False)
-                                gyo_d = 0
-                                dld = initialize_dld()
-                                next_month += 1
-                                if next_month == 13:
-                                    next_month = 1
 
             time.sleep(1)
     
