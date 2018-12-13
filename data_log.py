@@ -7,8 +7,7 @@ import i2clcda as lcd
 import DS18B20
 import numpy as np
 import pandas as pd
-import time
-import picamera
+
 
 while  True:
     try:
@@ -194,7 +193,7 @@ while  True:
             day = now.day
             month = now.month
             year = now.year
-
+            """
             #　1ヶ月のデータログ
             if month == next_month:
                 print "LOG DATA SAVE during Month("+str(year)+"_"+str(month)+"_date_log.csv)"
@@ -204,15 +203,15 @@ while  True:
                 next_month += 1
                 if next_month == 13:
                     next_month = 1
-
+                """
             #　1分毎のデータログ
-            if sec == 30:
+            if sec == 10:
                 wtemp = DS18B20.main() 
                 temp, humid, press = bme.Bme280(0x76, 1).get_data()
                 lcd.bme(wtemp,temp,humid,press)
                 df_write(dlm,gyo_m,'m',wtemp,temp,humid,press)
                 gyo_m += 1
-
+                """
                 #ライブカメラ制御
                 with picamera.PiCamera() as camera:
                     camera.resolution = (800, 600)
@@ -223,7 +222,7 @@ while  True:
                     if min == 0 and hour == 22:
                         file_name = str(month)+'_'+str(day)
                         camera.capture('/home/pi/img/'+file_name+'.jpg')
-
+                """
                 #　30分毎のデータログ
                 if min == 0 or min == 30:
                     dlm_a = df_ave(dlm)
@@ -234,7 +233,7 @@ while  True:
                     gyo_m = 0
                     gyo_h += 1
                     dlm = initialize_dlm()
-                    
+               
                     #　1日毎のデータログ
                     if day == next_day:
                         dlh_a = df_ave(dlh)
