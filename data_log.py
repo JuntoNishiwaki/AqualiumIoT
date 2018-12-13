@@ -7,7 +7,7 @@ import i2clcda as lcd
 import DS18B20
 import numpy as np
 import pandas as pd
-
+import time
 
 while  True:
     try:

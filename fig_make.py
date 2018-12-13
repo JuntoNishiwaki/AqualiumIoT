@@ -29,7 +29,7 @@ def rtemp_g(file,h_or_d,fn):
     plt.figure()
     data = pd.read_csv(file, index_col='1_Hour')
     plt.scatter(data.index, data['3_Room temp'])
-    plt.ylim(15,35)
+    plt.ylim(5,35)
     plt.xticks(rotation=45)
     if h_or_d == "h":
         plt.xlabel("Hour")

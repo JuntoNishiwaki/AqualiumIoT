@@ -16,8 +16,9 @@ org_name = 'live.jpg'
 now = datetime.datetime.now()
 
 while  True:
+
     try:
-        sec = now.second
+	    sec = datetime.datetime.now().second
 
         if sec == 50: #1分ごとに取得
 
@@ -116,8 +117,9 @@ while  True:
                 Result = cv2.drawContours(img_org, contours, -1, (0,255,0), 3)
 
                 # 表示
-                cv2.imshow("ebi_count_result.jpg", Result)
+                cv2.imwrite(pic_dir+"ebi_count_result.jpg", Result)
+                
                 
     except:
         print('Error! Restart after 1min')
-        time.sleep(60)
+        time.sleep(5)
