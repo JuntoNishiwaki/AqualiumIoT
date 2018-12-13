@@ -19,8 +19,10 @@ while  True:
 
     try:
 	    sec = datetime.datetime.now().second
+        hour = datetime.datetime.now().hour
+        
 
-        if sec == 50: #1分ごとに取得
+        if 16 <= hour <= 23 and sec == 50: #1分ごとに取得
 
             #ライブカメラ制御
             with picamera.PiCamera() as camera:

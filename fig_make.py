@@ -92,7 +92,7 @@ def graph(file,h_or_d,fn):
     ax1.set_title('Water temperature')
     ax1.scatter(data.index, data['2_Water temp'],c='red', s=20, marker='o')
     #ax1.set_title('Water temperature')
-    ax1.set_ylim(15,35)
+    ax1.set_ylim(10,35)
     ax1.set_ylabel("Water temparature (C)")
     if h_or_d == "h":
         ax1.set_xlabel("Hour")
@@ -106,7 +106,7 @@ def graph(file,h_or_d,fn):
     ax2.set_title('Room temperature')
     ax2.scatter(data.index, data['3_Room temp'],c='blue', s=20, marker='o')
     #ax2.set_title('Room temperature')
-    ax2.set_ylim(15,35)
+    ax2.set_ylim(10,35)
     ax2.set_ylabel("Room temparature (C)")
     if h_or_d == "h":
         ax2.set_xlabel("Hour")
