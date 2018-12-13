@@ -18,8 +18,10 @@ now = datetime.datetime.now()
 while  True:
 
     try:
-	    sec = datetime.datetime.now().second
+        sec = datetime.datetime.now().second
         hour = datetime.datetime.now().hour
+        day = datetime.datetime.now().day
+        month = datetime.datetime.now().month
         
 
         if 16 <= hour <= 23 and sec == 50: #1分ごとに取得
@@ -120,7 +122,9 @@ while  True:
 
                 # 表示
                 cv2.imwrite(pic_dir+"ebi_count_result.jpg", Result)
-                
+        
+        else:
+            pass             
                 
     except:
         print('Error! Restart after 1min')
