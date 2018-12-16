@@ -12,17 +12,17 @@ pic_dir= '/var/www/html/img/'
 #オリジナルファイル名
 org_name = 'live.jpg'
 
-#現時点の日時
-now = datetime.datetime.now()
-
 while  True:
 
     try:
-        sec = datetime.datetime.now().second
-        hour = datetime.datetime.now().hour
-        day = datetime.datetime.now().day
-        month = datetime.datetime.now().month
-        
+        #現時点の日時
+        now = datetime.datetime.now()
+
+        sec = now.second()
+        hour = now.hour()
+        day = now.day()
+        month = now.month()
+        week = now.weekday()
 
         if sec == 50: #1分ごとに取得
 
@@ -43,7 +43,7 @@ while  True:
                 # オリジナルをロード
                 img_org = cv2.imread(pic_dir+org_name)
                 
-                if 16 <= hour <= 23: 
+                if 0 <= week <= 4 and 16 <= hour <= 23 or 5 <= week <= 6 and 12 <= hour <= 23 : 
                     # 処理対象をロード
                     img = cv2.imread(pic_dir+org_name)
 
