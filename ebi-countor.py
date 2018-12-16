@@ -53,7 +53,7 @@ while  True:
                     img = cv2.imread(pic_dir+org_name)
 
                     #γ調整
-                    gamma = 0.5
+                    gamma = 0.9
 
                     # ガンマ値を使って Look up tableを作成。エビ頭部の赤色を検出
                     lookUpTable = np.empty((1,256), np.uint8)
@@ -67,7 +67,7 @@ while  True:
                     s = hsv[:, :, 1]
 
                     mask = np.zeros(h.shape, dtype=np.uint8)
-                    mask[((h < 25) | (h >180)) & (s > 220)] = 255
+                    mask[((h < 25) | (h >180)) & (s > 180)] = 255
 
                     # 前処理
                     #img = cv2.GaussianBlur(img,(3,3),0)
