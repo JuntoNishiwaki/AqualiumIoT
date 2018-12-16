@@ -125,7 +125,9 @@ while  True:
                     cv2.imwrite(pic_dir+"ebi_count_result.jpg", Result)
 
                 else:
-                    cv2.imwrite(pic_dir+"ebi_count_result.jpg", img_org)             
+                    #カウント時間外の画像切り替え
+                    not_ready = cv2.imread(pic_dir+"not_ready.png")
+                    cv2.imwrite(pic_dir+"ebi_count_result.jpg", not_ready)             
                 
     except:
         print('Error! Restart after 1min')
