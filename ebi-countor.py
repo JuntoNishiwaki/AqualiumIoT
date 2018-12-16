@@ -29,6 +29,11 @@ while  True:
             #ライブカメラ制御
             with picamera.PiCamera() as camera:
                 camera.resolution = (800, 600)
+                
+                #　露出モードとホワイトバランスのモード
+                camera.exposure_mode = 'auto'   #'off', 'auto', 'night', 'backlight'
+                camera.awb_mode = 'sunlight'    #'off', 'auto', 'sunlight', 'cloudy', 'shade'
+                
                 camera.start_preview()
                 # 遅延
                 time.sleep(10)
