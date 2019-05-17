@@ -9,9 +9,10 @@ import numpy as np
 import pandas as pd
 import wiringpi as wp
 import time
-
+"""
 while  True:
     try:
+"""        
         #　カウント用の初期パラメータ
         dlm_c = 0
         dlh_c = 0
@@ -279,7 +280,8 @@ while  True:
                         next_day = day + 1
 
             time.sleep(1)
-    
+"""    
     except:
         print('Error! Restart after 1min')
         time.sleep(60)
+"""
