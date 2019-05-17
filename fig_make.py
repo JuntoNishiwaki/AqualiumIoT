@@ -100,10 +100,11 @@ def graph(file,h_or_d,fn):
         data = pd.read_csv(file, index_col='1_Day')        
     fig = plt.figure(figsize=(8, 6))
     
-    ax1 = plt.subplot2grid((2,2), (0,0))
-    ax2 = plt.subplot2grid((2,2), (0,1))
-    ax3 = plt.subplot2grid((2,2), (1,0))
-    ax4 = plt.subplot2grid((2,2), (1,1))    
+    ax1 = plt.subplot2grid((2,3), (0,0))
+    ax2 = plt.subplot2grid((2,3), (0,1))
+    ax3 = plt.subplot2grid((2,3), (1,0))
+    ax4 = plt.subplot2grid((2,3), (1,1)) 
+    ax5 = plt.subplot2grid((2,3), (2,0))   
     
     # Water temperature
     ax1.set_title('Water temperature')
@@ -165,6 +166,26 @@ def graph(file,h_or_d,fn):
     plt.savefig(str(fn)+".png")
     plt.close(fig)
     #plt.show()
+
+    # Gas
+    ax4.set_title('Gas')    
+    ax4.scatter(data.index, data['6_Gas'],c='orange', s=20, marker='o')
+    #ax4.set_title('Pressure')    
+    ax4.set_ylim(50,100)
+    ax4.set_ylabel("Gas")    
+    if h_or_d == "h":
+        ax4.set_xlabel("Hour")
+        ax4.set_xlim(0 ,24)
+    
+    if h_or_d == "d":
+        ax4.set_xlabel("Day")
+        ax4.set_xlim(0 ,31)
+        
+    fig.subplots_adjust(left=0.075, bottom=0.05, right=0.95, top=0.95, wspace=0.3, hspace=0.40)
+    plt.savefig(str(fn)+".png")
+    plt.close(fig)
+    #plt.show()
+
 
 now = datetime.datetime.now()
 next_day = now.day + 1
