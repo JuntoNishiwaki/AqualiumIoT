@@ -76,6 +76,23 @@ def press_g(file,h_or_d,fn):
     plt.clf()
     #plt.show()
 
+def gas_g(file,h_or_d,fn):
+    plt.figure()
+    data = pd.read_csv(file, index_col='1_Hour')
+    plt.scatter(data.index, data['6_gas'])
+    plt.ylim(15,35)
+    plt.xticks(rotation=45)
+    if h_or_d == "h":
+        plt.xlabel("Hour")
+        plt.xlim(0 ,24)
+    if h_or_d == "d":
+        plt.xlabel("Day")
+        plt.xlim(0 ,31)
+    plt.ylabel("Gas")
+    plt.savefig(str(fn)+".png")
+    plt.clf()
+    #plt.show()
+
 def graph(file,h_or_d,fn):
     if h_or_d == "h":
         data = pd.read_csv(file, index_col='1_Hour')
