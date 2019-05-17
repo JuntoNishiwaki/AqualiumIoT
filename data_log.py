@@ -282,4 +282,4 @@ time.sleep(1)
    
 #    except:
 #        print('Error! Restart after 1min')
-#        time.sleep(60)
+        time.sleep(60)
