@@ -13,18 +13,23 @@ pic_dir= '/var/www/html/img/'
 org_name = 'live.jpg'
 
 while  True:
+    time.sleep(1)
 
     try:
         #現時点の日時
+        #print("now data get!")
+        
         now = datetime.datetime.now()
 
         sec = now.second
+        min = now.minute
         hour = now.hour
         day = now.day
         month = now.month
         week = now.weekday()
 
         if sec == 50: #1分ごとに取得
+            #print("Camera!")
 
             #ライブカメラ制御
             with picamera.PiCamera() as camera:
@@ -41,9 +46,12 @@ while  True:
                 camera.capture(pic_dir+org_name)
 
                 #別途保存先が必要な場合は指定
-                if min == 0 and hour == 22:
-                    file_name = str(month)+'_'+str(day)
-                    camera.capture('/home/pi/img/'+file_name+'.jpg')
+                if ( hour == 22 and min == 0 ):
+                    #オリジナル保存先
+                    file_name = str(month)+"_"+str(day)
+                    print(file_name)
+                    camera.capture("/home/pi/img/"+file_name+".jpg")
+                    print("Save Today's Pic!")
 
                 # オリジナルをロード
                 img_org = cv2.imread(pic_dir+org_name)
@@ -53,7 +61,7 @@ while  True:
                     img = cv2.imread(pic_dir+org_name)
 
                     #γ調整
-                    gamma = 0.9
+                    gamma = 1.0
 
                     # ガンマ値を使って Look up tableを作成。エビ頭部の赤色を検出
                     lookUpTable = np.empty((1,256), np.uint8)
@@ -67,7 +75,7 @@ while  True:
                     s = hsv[:, :, 1]
 
                     mask = np.zeros(h.shape, dtype=np.uint8)
-                    mask[((h < 25) | (h >180)) & (s > 180)] = 255
+                    mask[((h < 10) | (h >280)) & (s >130)] = 255
 
                     # 前処理
                     #img = cv2.GaussianBlur(img,(3,3),0)
@@ -81,7 +89,7 @@ while  True:
                     # 輪郭1を膨張させて、エビの位置を取得する。
                     kernel = np.ones((3,3),np.uint8)
                     #img_dst = cv2.erode(img_dst,kernel,iterations = 1)
-                    img_dst = cv2.dilate(img_dst,kernel,iterations = 13)
+                    img_dst = cv2.dilate(img_dst,kernel,iterations = 9)
                     img_dst, contours, hierarchy = cv2.findContours(img_dst, 2, 1)
 
                     # ラベリング処理
@@ -135,5 +143,5 @@ while  True:
                     cv2.imwrite(pic_dir+"ebi_count_result.jpg", not_ready)             
                 
     except:
-        print('Error! Restart after 1min')
+        print('Error! Restart after 5sec')
         time.sleep(5)
