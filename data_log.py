@@ -63,10 +63,10 @@ wtemp_log_h = np.zeros(num_h)
 rtemp_log_h = np.zeros(num_h)
 humid_log_h = np.zeros(num_h)
 press_log_h = np.zeros(num_h)
-gas_log_m = np.zeros(num_m)
+gas_log_h = np.zeros(num_h)
 hour_log = np.zeros(num_h)
 dlh = pd.DataFrame({
-    '6_Gas': gas_log_m,
+    '6_Gas': gas_log_h,
     '5_Pressure': press_log_h,
     '4_Humidity': humid_log_h,
     '3_Room temp' : rtemp_log_h,
@@ -80,10 +80,10 @@ wtemp_log_d = np.zeros(num_d)
 rtemp_log_d = np.zeros(num_d)
 humid_log_d = np.zeros(num_d)
 press_log_d = np.zeros(num_d)
-gas_log_m = np.zeros(num_m)
+gas_log_d = np.zeros(num_d)
 day_log = np.zeros(num_d)
 dld = pd.DataFrame({
-    '6_Gas': gas_log_m,
+    '6_Gas': gas_log_d,
     '5_Pressure': press_log_d,
     '4_Humidity': humid_log_d,
     '3_Room temp' : rtemp_log_d,
