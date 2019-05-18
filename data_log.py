@@ -11,6 +11,9 @@ import wiringpi as wp
 import RPi.GPIO as GPIO
 import time
 
+Fan_start_temp = 26
+Airc_start_temp = 27
+
 #while  True:
 #    try:    
 #　カウント用の初期パラメータ
@@ -196,6 +199,11 @@ def gas_detect(PIN_BASE,SPI_CH):
     gas = wp.analogRead(PIN_BASE)
     return gas
 
+# GPIO使用準備
+    GPIO_list = [16, 20, 21, 24, 25]
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(GPIO_list, GPIO.OUT)
+
 #　再起動時のデータ読み込み
 try:
     day = now.day
@@ -246,17 +254,24 @@ while  True:
         else:
             gas_state = "要水換え"
         
-        # 水換えタイミングの出力（LED）
-        LED_list = [16, 20, 21]
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(LED_list, GPIO.OUT)
+        """
+        #扇風機制御 0:OFF, 1:ON
+        if wtemp > Upper_temp and fan == 0:
+            GPIO.output(GPIO_list[3], GPIO.HIGH)
+            fan = 1
+        else:
+            GPIO.output(GPIO_list[3], GPIO.LOW)
+            fan = 0
 
-        #扇風機制御
-        fan = 0
+        #エアコン制御（未実装）
+        if wtemp > Airc_start_temp and Airc == 0:
+            GPIO.output(GPIO_list[4], GPIO.HIGH)
+            Airc = 1
+        else:
+            GPIO.output(GPIO_list[4], GPIO.LOW)
+            Airc = 0
+        """
 
-        #エアコン制御
-        airc = 0
-        
         # 扇風機の動作確認
         if fan == 1:
             fan_state = "ON"
@@ -290,19 +305,19 @@ while  True:
         BAD = 150
         # 良好
         if GOOD >= gas:
-            GPIO.output(LED_list[0], GPIO.HIGH)
-            GPIO.output(LED_list[1], GPIO.LOW)
-            GPIO.output(LED_list[2], GPIO.LOW)
+            GPIO.output(GPIO_list[0], GPIO.HIGH)
+            GPIO.output(GPIO_list[1], GPIO.LOW)
+            GPIO.output(GPIO_list[2], GPIO.LOW)
         # そろそろ水換え
         elif BAD >= gas > GOOD:
-            GPIO.output(LED_list[0], GPIO.LOW)
-            GPIO.output(LED_list[1], GPIO.HIGH)
-            GPIO.output(LED_list[2], GPIO.LOW)
+            GPIO.output(GPIO_list[0], GPIO.LOW)
+            GPIO.output(GPIO_list[1], GPIO.HIGH)
+            GPIO.output(GPIO_list[2], GPIO.LOW)
         # 要水換え
         else: 
-            GPIO.output(LED_list[0], GPIO.LOW)
-            GPIO.output(LED_list[1], GPIO.LOW)
-            GPIO.output(LED_list[2], GPIO.HIGH)
+            GPIO.output(GPIO_list[0], GPIO.LOW)
+            GPIO.output(GPIO_list[1], GPIO.LOW)
+            GPIO.output(GPIO_list[2], GPIO.HIGH)
 
         # LCDへの出力
         lcd.bme(wtemp,temp,humid,press,gas)
