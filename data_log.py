@@ -263,13 +263,13 @@ while  True:
             GPIO.output(GPIO_list[3], GPIO.LOW)
             fan = 0
 
-        #エアコン制御（未実装）
-        if wtemp > Airc_start_temp and Airc == 0:
+        #エアコン制御 0:OFF, 1:ON
+        if wtemp > Airc_start_temp and airc == 0:
             GPIO.output(GPIO_list[4], GPIO.HIGH)
-            Airc = 1
+            airc = 1
         else:
             GPIO.output(GPIO_list[4], GPIO.LOW)
-            Airc = 0
+            airc = 0
         """
 
         # 扇風機の動作確認
