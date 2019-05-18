@@ -361,6 +361,6 @@ while  True:
                 
             time.sleep(1)
    
-except:
-    print('Error! Restart after 1min')
-    time.sleep(60)
+    except:
+        print('Error! Restart after 1min')
+        time.sleep(60)
