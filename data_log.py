@@ -269,7 +269,7 @@ while  True:
             #　1日毎のデータログ
             if day == next_day:
                 dlh_a = df_ave(dlh)
-                df_write(dld,gyo_d,'d',dlh_a[0],dlh_a[1],dlh_a[2], dlh_a[3], dlm_a[4])
+                df_write(dld,gyo_d,'d',dlh_a[0],dlh_a[1],dlh_a[2], dlh_a[3], dlh_a[4])
                 #Save data log
                 print "LOG DATA SAVE during Day("+str(month)+"_"+str(day)+"_date_log.csv)"
                 dld.to_csv("./"+str(month)+"_"+"date_log.csv", index=False)        
