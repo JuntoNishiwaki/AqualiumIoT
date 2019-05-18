@@ -98,13 +98,13 @@ def graph(file,h_or_d,fn):
         data = pd.read_csv(file, index_col='1_Hour')
     else:
         data = pd.read_csv(file, index_col='1_Day')        
-    fig = plt.figure(figsize=(12, 6))
+    fig = plt.figure(figsize=(8, 9))
     
-    ax1 = plt.subplot2grid((2,3), (0,0))
-    ax2 = plt.subplot2grid((2,3), (0,1))
-    ax3 = plt.subplot2grid((2,3), (1,0))
-    ax4 = plt.subplot2grid((2,3), (1,1)) 
-    ax5 = plt.subplot2grid((2,3), (2,0))   
+    ax1 = plt.subplot2grid((3,2), (0,0))
+    ax2 = plt.subplot2grid((3,2), (0,1))
+    ax3 = plt.subplot2grid((3,2), (1,0))
+    ax4 = plt.subplot2grid((3,2), (1,1)) 
+    ax5 = plt.subplot2grid((3,2), (2,0))   
     
     # Water temperature
     ax1.set_title('Water temperature')
