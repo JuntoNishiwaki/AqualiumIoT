@@ -8,6 +8,7 @@ import DS18B20
 import numpy as np
 import pandas as pd
 import wiringpi as wp
+import RPi.GPIO as GPIO
 import time
 
 #while  True:
@@ -238,6 +239,26 @@ while  True:
         temp, humid, press = bme.Bme280(0x76, 1).get_data()
         # 臭気の取得
         gas = gas_detect(PIN_BASE,SPI_CH)
+        # 水換えタイミングの出力（LED）
+        LED_list = [16, 20, 21]
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(LED_list, GPIO.OUT)
+        # 良好
+        if 70 >= gas:
+            GPIO.output(LED_list[0], GPIO.HIGH)
+            GPIO.output(LED_list[1], GPIO.LOW)
+            GPIO.output(LED_list[2], GPIO.LOW)
+        # そろそろ水換え
+        elif 150 >= gas > 70
+            GPIO.output(LED_list[0], GPIO.LOW)
+            GPIO.output(LED_list[1], GPIO.HIGH)
+            GPIO.output(LED_list[2], GPIO.LOW)
+        # 要水換え
+        else 
+            GPIO.output(LED_list[0], GPIO.LOW)
+            GPIO.output(LED_list[1], GPIO.LOW)
+            GPIO.output(LED_list[2], GPIO.HIGH)
+
         # LCDへの出力
         lcd.bme(wtemp,temp,humid,press)
         df_write(dlm,gyo_m,'m',wtemp,temp,humid,press,gas)
