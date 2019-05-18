@@ -239,12 +239,53 @@ while  True:
         temp, humid, press = bme.Bme280(0x76, 1).get_data()
         # 臭気の取得
         gas = gas_detect(PIN_BASE,SPI_CH)
+        if 60 > gas:
+            gas_state = "良好"
+        elif 150 > gas >= 60:
+            gas_state = "そろそろ水換え"
+        else:
+            gas_state = "要水換え"
+        
         # 水換えタイミングの出力（LED）
         LED_list = [16, 20, 21]
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(LED_list, GPIO.OUT)
-    
-    # 基準値
+
+        #扇風機制御
+        fan = 0
+
+        #エアコン制御
+        airc = 0
+        
+        # 扇風機の動作確認
+        if fan == 1:
+            fan_state = "ON"
+        else fan == 0:
+            fan_state = "OFF"
+        
+        # エアコンの動作確認
+        if airc == 1:
+            airc_state = "ON"
+        else airc == 0:
+            airc_state = "OFF"
+        
+        #html編集
+        path = '//var/www/html/index.txt'
+        new_path = '//var/www/html/index.html'
+        with open(path, "r", encoding="utf-8") as f:
+            fdata = f.read()
+            fdata = fdata.replace("wtwtwt", wtemp)
+            fdata = fdata.replace("rtrtrt", temp)
+            fdata = fdata.replace("pppp", press)
+            fdata = fdata.replace("hhhh", humid)
+            fdata = fdata.replace("eeee", gas_state)
+            fdata = fdata.replace("ffff", fan_state)
+            fdata = fdata.replace("aaaa", airc_state)        
+
+        with open(new_path, "w", encoding="utf-8") as f:
+            f.write(fdata)
+
+        # 基準値
         GOOD = 60
         BAD = 150
         # 良好
@@ -302,6 +343,20 @@ while  True:
                 gyo_d += 1
                 dlh = initialize_dlh()
                 next_day = day + 1
+        
+        # html編集
+        path = '//var/www/html/index.html'
+        f = open(path, 'w')
+        with open(path, mode = 'r', encoding = 'utf-8') as f:
+            line = f.readline()
+            while line:
+                print(line)
+                line = f.readline()
+
+        new_1st = "<p>室温：" + str(temp) + "℃         水温：" + str(wtemp) + "℃</p>"
+        new_2nd = "<p>気圧：" + str(press) + "hPa      湿度：" + str(humid) + "％</p>"
+        new_3rd = "<p>水質：" + eval + "</p>"
+        new_4th = "<p>扇風機：" + Fan+"       エアコン：" + Airc + "</p>"
 
     time.sleep(1)
    
