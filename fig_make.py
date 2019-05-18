@@ -166,7 +166,7 @@ def graph(file,h_or_d,fn):
     ax5.set_title('Gas')    
     ax5.scatter(data.index, data['6_Gas'],c='orange', s=20, marker='o')
     #ax4.set_title('Pressure')    
-    ax5.set_ylim(50,100)
+    ax5.set_ylim(0,200)
     ax5.set_ylabel("Gas")    
     if h_or_d == "h":
         ax5.set_xlabel("Hour")
