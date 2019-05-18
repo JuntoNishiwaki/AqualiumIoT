@@ -249,12 +249,12 @@ while  True:
             GPIO.output(LED_list[1], GPIO.LOW)
             GPIO.output(LED_list[2], GPIO.LOW)
         # そろそろ水換え
-        elif 150 >= gas > 70
+        elif 150 >= gas > 70:
             GPIO.output(LED_list[0], GPIO.LOW)
             GPIO.output(LED_list[1], GPIO.HIGH)
             GPIO.output(LED_list[2], GPIO.LOW)
         # 要水換え
-        else 
+        else: 
             GPIO.output(LED_list[0], GPIO.LOW)
             GPIO.output(LED_list[1], GPIO.LOW)
             GPIO.output(LED_list[2], GPIO.HIGH)
