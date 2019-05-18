@@ -259,7 +259,7 @@ while  True:
             gas_state = "要水換え"
         
         #扇風機制御 0:OFF, 1:ON
-        if wtemp > Upper_temp and fan == 0:
+        if wtemp > Fan_start_temp and fan == 0:
             GPIO.output(GPIO_list[3], GPIO.HIGH)
             fan = 1
         else:
@@ -361,7 +361,7 @@ while  True:
                 dlh = initialize_dlh()
                 next_day = day + 1
         
-    time.sleep(1)}
+    time.sleep(1)
    
 #    except:
 #        print('Error! Restart after 1min')
