@@ -93,7 +93,7 @@ dld = pd.DataFrame({
 print "START MONITERING!!"
 
 #　端末での水温、室温、湿度、気圧の表示用
-def print_date(wtemp,temp,humid,press):
+def print_date(wtemp,temp,humid,press,gas):
     print "###########################"
 
     print "Date:"+str(ts)
@@ -132,7 +132,7 @@ def df_ave(d_name):
     humid_ave = round(df_means["4_Humidity"],1)
     press_ave = round(df_means["5_Pressure"],1)
     gas_ave = round(df_means["6_Gas"],1)
-    return wtemp_ave, temp_ave, humid_ave, press_ave
+    return wtemp_ave, temp_ave, humid_ave, press_ave, gas_ave
 
 #　データフレームの初期化：分
 def initialize_dlm():
