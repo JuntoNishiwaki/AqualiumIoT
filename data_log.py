@@ -274,10 +274,10 @@ while  True:
         new_path = '//var/www/html/index.html'
         with open(path, "r") as f:
             fdata = f.read()
-            fdata = fdata.replace("wtwtwt", str(wtemp))
-            fdata = fdata.replace("rtrtrt", str(temp))
-            fdata = fdata.replace("pppp", str(press)
-            fdata = fdata.replace("hhhh", str(humid))
+            fdata = fdata.replace("wtwtwt", str(round(wtemp,1)))
+            fdata = fdata.replace("rtrtrt", str(round(temp,1)))
+            fdata = fdata.replace("pppp", str(round(press,1)))
+            fdata = fdata.replace("hhhh", str(round(humid,1)))
             fdata = fdata.replace("eeee", str(gas_state))
             fdata = fdata.replace("ffff", str(fan_state))
             fdata = fdata.replace("aaaa", str(airc_state))        
