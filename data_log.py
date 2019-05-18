@@ -243,13 +243,17 @@ while  True:
         LED_list = [16, 20, 21]
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(LED_list, GPIO.OUT)
+    
+    # 基準値
+        GOOD = 60
+        BAD = 150
         # 良好
-        if 70 >= gas:
+        if GOOD >= gas:
             GPIO.output(LED_list[0], GPIO.HIGH)
             GPIO.output(LED_list[1], GPIO.LOW)
             GPIO.output(LED_list[2], GPIO.LOW)
         # そろそろ水換え
-        elif 150 >= gas > 70:
+        elif BAD >= gas > GOOD:
             GPIO.output(LED_list[0], GPIO.LOW)
             GPIO.output(LED_list[1], GPIO.HIGH)
             GPIO.output(LED_list[2], GPIO.LOW)
@@ -260,7 +264,7 @@ while  True:
             GPIO.output(LED_list[2], GPIO.HIGH)
 
         # LCDへの出力
-        lcd.bme(wtemp,temp,humid,press)
+        lcd.bme(wtemp,temp,humid,press,gas)
         df_write(dlm,gyo_m,'m',wtemp,temp,humid,press,gas)
         gyo_m += 1
         PIN_BASE += 2
