@@ -363,4 +363,5 @@ while  True:
    
     except:
         print('Error! Restart after 1min')
+        GPIO.cleanup()
         time.sleep(60)
