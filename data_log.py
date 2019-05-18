@@ -260,29 +260,29 @@ while  True:
         # 扇風機の動作確認
         if fan == 1:
             fan_state = "ON"
-        else fan == 0:
+        else:
             fan_state = "OFF"
         
         # エアコンの動作確認
         if airc == 1:
             airc_state = "ON"
-        else airc == 0:
+        else:
             airc_state = "OFF"
         
         #html編集
         path = '//var/www/html/index.txt'
         new_path = '//var/www/html/index.html'
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, "r") as f:
             fdata = f.read()
-            fdata = fdata.replace("wtwtwt", wtemp)
-            fdata = fdata.replace("rtrtrt", temp)
-            fdata = fdata.replace("pppp", press)
-            fdata = fdata.replace("hhhh", humid)
-            fdata = fdata.replace("eeee", gas_state)
-            fdata = fdata.replace("ffff", fan_state)
-            fdata = fdata.replace("aaaa", airc_state)        
+            fdata = fdata.replace("wtwtwt", str(wtemp))
+            fdata = fdata.replace("rtrtrt", str(temp))
+            fdata = fdata.replace("pppp", str(press)
+            fdata = fdata.replace("hhhh", str(humid))
+            fdata = fdata.replace("eeee", str(gas_state))
+            fdata = fdata.replace("ffff", str(fan_state))
+            fdata = fdata.replace("aaaa", str(airc_state))        
 
-        with open(new_path, "w", encoding="utf-8") as f:
+        with open(new_path, "w") as f:
             f.write(fdata)
 
         # 基準値
@@ -344,20 +344,6 @@ while  True:
                 dlh = initialize_dlh()
                 next_day = day + 1
         
-        # html編集
-        path = '//var/www/html/index.html'
-        f = open(path, 'w')
-        with open(path, mode = 'r', encoding = 'utf-8') as f:
-            line = f.readline()
-            while line:
-                print(line)
-                line = f.readline()
-
-        new_1st = "<p>室温：" + str(temp) + "℃         水温：" + str(wtemp) + "℃</p>"
-        new_2nd = "<p>気圧：" + str(press) + "hPa      湿度：" + str(humid) + "％</p>"
-        new_3rd = "<p>水質：" + eval + "</p>"
-        new_4th = "<p>扇風機：" + Fan+"       エアコン：" + Airc + "</p>"
-
     time.sleep(1)
    
     #except:
