@@ -258,6 +258,7 @@ while  True:
             GPIO.output(LED_list[0], GPIO.LOW)
             GPIO.output(LED_list[1], GPIO.LOW)
             GPIO.output(LED_list[2], GPIO.HIGH)
+        GPIO.cleanup()
 
         # LCDへの出力
         lcd.bme(wtemp,temp,humid,press)
