@@ -9,10 +9,18 @@ import numpy as np
 import pandas as pd
 import wiringpi as wp
 import RPi.GPIO as GPIO
+import os
+import sys
 import time
 
 Fan_start_temp = 26
 Airc_start_temp = 27
+
+#IR用テキスト指定
+airc27on = '`cat ./ADIR01P/airc-cool-27c.txt`'
+airc28on = '`cat ./ADIR01P/airc-cool-28c.txt`'
+joshitsu = '`cat ./ADIR01P/airc-joshitsu.txt`'
+aircoff = '`cat ./ADIR01P/airc-off.txt`'
 
 while  True:
     try:    
@@ -207,6 +215,10 @@ while  True:
             wp.mcp3002Setup(PIN_BASE,SPI_CH)
             gas = wp.analogRead(PIN_BASE)
             return gas
+        
+        # IR送受信
+        def send(code):
+            os.system('bto_advanced_USBIR_cmd -d' + code)
 
         #　再起動時のデータ読み込み
         try:
@@ -262,30 +274,22 @@ while  True:
                 if wtemp > Fan_start_temp and fan == 0:
                     GPIO.output(GPIO_list[3], GPIO.HIGH)
                     fan = 1
+                    fan_state = "ON"
                 else:
                     GPIO.output(GPIO_list[3], GPIO.LOW)
                     fan = 0
+                    fan_state = "OFF"
                 
                 #エアコン制御 0:OFF, 1:ON
                 if wtemp > Airc_start_temp and airc == 0:
                     GPIO.output(GPIO_list[4], GPIO.HIGH)
                     airc = 1
+                    airc_state = "ON"
                 else:
                     GPIO.output(GPIO_list[4], GPIO.LOW)
                     airc = 0
-            
-                # 扇風機の動作確認
-                if fan == 1:
-                    fan_state = "ON"
-                else:
-                    fan_state = "OFF"
-                
-                # エアコンの動作確認
-                if airc == 1:
-                    airc_state = "ON"
-                else:
                     airc_state = "OFF"
-                
+                        
                 #html編集
                 path = '//var/www/html/index.txt'
                 new_path = '//var/www/html/index.html'
@@ -347,6 +351,17 @@ while  True:
                     dlh.to_csv("./"+str(month)+"_"+str(day)+"_date_log.csv", index=False)
                     gyo_m = 0
                     gyo_h += 1
+                    
+                    #エアコン制御
+                    if airc == 1 and airc_state == 'OFF':
+                        send(airc28on)
+                    elif airc == 1 and airc_state == 'ON':
+                        pass
+                    else:
+                        send(aircoff)
+                        airc = 0
+                        airc_state = 'OFF'
+
                     dlm = initialize_dlm()
                 
                     #　1日毎のデータログ
