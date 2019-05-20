@@ -15,6 +15,7 @@ import time
 
 Fan_start_temp = 26
 Airc_start_temp = 27
+a = True
 
 #IR用テキスト指定
 airc27on = '`cat ./ADIR01P/airc-cool-27c.txt`'
@@ -281,31 +282,18 @@ while  True:
                     fan_state = "OFF"
                 
                 #エアコン制御 0:OFF, 1:ON
-                if wtemp > Airc_start_temp and airc == 0:
-                    GPIO.output(GPIO_list[4], GPIO.HIGH)
-                    airc = 1
-                    airc_state = "ON"
+                if wtemp > Airc_start_temp:
+                    if a == True:
+                        send(airc28on)
+                        a = False
+                    airc_state == 'ON'
                 else:
-                    GPIO.output(GPIO_list[4], GPIO.LOW)
+                    if a == False:
+                        send(aircoff)
                     airc = 0
-                    airc_state = "OFF"
-                        
-                #html編集
-                path = '//var/www/html/index.txt'
-                new_path = '//var/www/html/index.html'
-                with open(path, "r") as f:
-                    fdata = f.read()
-                    fdata = fdata.replace("wtwtwt", str(round(wtemp,1)))
-                    fdata = fdata.replace("rtrtrt", str(round(temp,1)))
-                    fdata = fdata.replace("pppp", str(round(press,1)))
-                    fdata = fdata.replace("hhhh", str(round(humid,1)))
-                    fdata = fdata.replace("eeee", str(gas_state))
-                    fdata = fdata.replace("ffff", str(fan_state))
-                    fdata = fdata.replace("aaaa", str(airc_state))        
-
-                with open(new_path, "w") as f:
-                    f.write(fdata)
-
+                    airc_state = 'OFF'
+                    a = True
+                
                 # 基準値
                 GOOD = 60
                 BAD = 150
@@ -324,21 +312,29 @@ while  True:
                     GPIO.output(GPIO_list[0], GPIO.LOW)
                     GPIO.output(GPIO_list[1], GPIO.LOW)
                     GPIO.output(GPIO_list[2], GPIO.HIGH)
-                #エアコン制御
-                if airc == 1 and airc_state == 'OFF':
-                    send(airc28on)
-                elif airc == 1 and airc_state == 'ON':
-                    pass
-                else:
-                    send(aircoff)
-                    airc = 0
-                    airc_state = 'OFF'
-                    
+
                 # LCDへの出力
                 lcd.bme(wtemp,temp,humid,press,gas)
                 df_write(dlm,gyo_m,'m',wtemp,temp,humid,press,gas)
                 gyo_m += 1
                 PIN_BASE += 2
+
+                #html編集
+                path = '//var/www/html/index.txt'
+                new_path = '//var/www/html/index.html'
+                with open(path, "r") as f:
+                    fdata = f.read()
+                    fdata = fdata.replace("wtwtwt", str(round(wtemp,1)))
+                    fdata = fdata.replace("rtrtrt", str(round(temp,1)))
+                    fdata = fdata.replace("pppp", str(round(press,1)))
+                    fdata = fdata.replace("hhhh", str(round(humid,1)))
+                    fdata = fdata.replace("eeee", str(gas_state))
+                    fdata = fdata.replace("ffff", str(fan_state))
+                    fdata = fdata.replace("aaaa", str(airc_state))        
+
+                with open(new_path, "w") as f:
+                    f.write(fdata)
+
                 """
                 #ライブカメラ制御
                 with picamera.PiCamera() as camera:
