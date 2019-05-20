@@ -324,7 +324,16 @@ while  True:
                     GPIO.output(GPIO_list[0], GPIO.LOW)
                     GPIO.output(GPIO_list[1], GPIO.LOW)
                     GPIO.output(GPIO_list[2], GPIO.HIGH)
-
+                #エアコン制御
+                if airc == 1 and airc_state == 'OFF':
+                    send(airc28on)
+                elif airc == 1 and airc_state == 'ON':
+                    pass
+                else:
+                    send(aircoff)
+                    airc = 0
+                    airc_state = 'OFF'
+                    
                 # LCDへの出力
                 lcd.bme(wtemp,temp,humid,press,gas)
                 df_write(dlm,gyo_m,'m',wtemp,temp,humid,press,gas)
@@ -351,16 +360,6 @@ while  True:
                     dlh.to_csv("./"+str(month)+"_"+str(day)+"_date_log.csv", index=False)
                     gyo_m = 0
                     gyo_h += 1
-                    
-                    #エアコン制御
-                    if airc == 1 and airc_state == 'OFF':
-                        send(airc28on)
-                    elif airc == 1 and airc_state == 'ON':
-                        pass
-                    else:
-                        send(aircoff)
-                        airc = 0
-                        airc_state = 'OFF'
 
                     dlm = initialize_dlm()
                 
