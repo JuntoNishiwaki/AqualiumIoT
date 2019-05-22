@@ -16,8 +16,6 @@ import time
 #エアコン＋扇風機の起動温度
 Fan_start_temp = 26
 Airc_start_temp = 26.5
-fan_state = 'OFF'
-fan_state = 'OFF'
 
 # 臭気センサーの初期設
 SPI_CH = 0
