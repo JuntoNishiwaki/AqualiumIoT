@@ -14,8 +14,13 @@ import sys
 import time
 
 Fan_start_temp = 26
-Airc_start_temp = 27
+Airc_start_temp = 26.5
+
+# 臭気センサーの初期設
+SPI_CH = 0
+PIN_BASE = 64
 a = True
+f = True
 
 #IR用テキスト指定
 airc27on = '`cat ./ADIR01P/airc-cool-27c.txt`'
@@ -44,14 +49,6 @@ while  True:
         GPIO_list = [16, 20, 21, 24, 25]
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(GPIO_list, GPIO.OUT)
-
-        # 臭気センサーの初期設定
-        SPI_CH = 0
-        PIN_BASE = 64
-
-        #FANとエアコン初期設定（ＯＦＦ状態）
-        fan = 0
-        airc = 0
 
         #　取得タイミングの設定。dm：30min毎 
         dm = 30
@@ -271,17 +268,19 @@ while  True:
                 else:
                     gas_state = "要水換え"
                 
-                #扇風機制御 0:OFF, 1:ON
-                if wtemp > Fan_start_temp and fan == 0:
-                    GPIO.output(GPIO_list[3], GPIO.HIGH)
-                    fan = 1
-                    fan_state = "ON"
+                #扇風機制御
+                if wtemp > Fan_start_temp:
+                    if f == True:
+                        GPIO.output(GPIO_list[3], GPIO.HIGH)
+                        f = False
+                    fan_state == 'ON'
                 else:
-                    GPIO.output(GPIO_list[3], GPIO.LOW)
-                    fan = 0
-                    fan_state = "OFF"
+                    if f == False:
+                        GPIO.output(GPIO_list[3], GPIO.LOW)
+                    fan_state = 'OFF'
+                    f = True
                 
-                #エアコン制御 0:OFF, 1:ON
+                #エアコン制御 
                 if wtemp > Airc_start_temp:
                     if a == True:
                         send(airc28on)
@@ -290,7 +289,6 @@ while  True:
                 else:
                     if a == False:
                         send(aircoff)
-                    airc = 0
                     airc_state = 'OFF'
                     a = True
                 
