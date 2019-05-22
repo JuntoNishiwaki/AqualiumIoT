@@ -16,8 +16,8 @@ import time
 #エアコン＋扇風機の起動温度
 Fan_start_temp = 26
 Airc_start_temp = 26.5
-fan_state == 'OFF'
-fan_state == 'OFF'
+fan_state = 'OFF'
+fan_state = 'OFF'
 
 # 臭気センサーの初期設
 SPI_CH = 0
@@ -276,7 +276,7 @@ while  True:
                     if f == True:
                         GPIO.output(GPIO_list[3], GPIO.HIGH)
                         f = False
-                    fan_state == 'ON'
+                    fan_state = 'ON'
                 else:
                     if f == False:
                         GPIO.output(GPIO_list[3], GPIO.LOW)
@@ -288,7 +288,7 @@ while  True:
                     if a == True:
                         send(airc28on)
                         a = False
-                    airc_state == 'ON'
+                    airc_state = 'ON'
                 else:
                     if a == False:
                         send(aircoff)
