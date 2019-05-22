@@ -13,6 +13,7 @@ import os
 import sys
 import time
 
+#エアコン＋扇風機の起動温度
 Fan_start_temp = 26
 Airc_start_temp = 26.5
 
@@ -46,7 +47,7 @@ while  True:
         next_year = now.year + 1
 
         # GPIO使用準備
-        GPIO_list = [16, 20, 21, 24, 25]
+        GPIO_list = [16, 20, 21, 19, 26]
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(GPIO_list, GPIO.OUT)
 
