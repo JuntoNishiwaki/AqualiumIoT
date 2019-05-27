@@ -16,6 +16,8 @@ import time
 #エアコン＋扇風機の起動温度
 Fan_start_temp = 25.5
 Airc_start_temp = 26
+fan_state = 'OFF'
+airc_state = 'OFF'
 
 # 臭気センサーの初期設
 SPI_CH = 0
@@ -304,7 +306,9 @@ while  True:
             fdata = fdata.replace("rtrtrt", str(round(temp,1)))
             fdata = fdata.replace("pppp", str(round(press,1)))
             fdata = fdata.replace("hhhh", str(round(humid,1)))
-            fdata = fdata.replace("eeee", str(gas_state))    
+            fdata = fdata.replace("eeee", str(gas_state))
+            fdata = fdata.replace("ffff", str(fan_state))
+            fdata = fdata.replace("aaaa", str(airc_state))        
 
         with open(new_path, "w") as f:
             f.write(fdata)
@@ -354,20 +358,6 @@ while  True:
                 a = True
 
             dlm = initialize_dlm()
-
-            #html編集
-            path = '//var/www/html/index.txt'
-            new_path = '//var/www/html/index.html'
-            with open(path, "r") as f:
-                fdata = f.read()
-                fdata = fdata.replace("wtwtwt", str(round(wtemp,1)))
-                fdata = fdata.replace("rtrtrt", str(round(temp,1)))
-                fdata = fdata.replace("pppp", str(round(press,1)))
-                fdata = fdata.replace("hhhh", str(round(humid,1)))
-                fdata = fdata.replace("eeee", str(gas_state))
-                fdata = fdata.replace("ffff", str(fan_state))
-                fdata = fdata.replace("aaaa", str(airc_state))        
-
         
             #　1日毎のデータログ
             if day == next_day:
