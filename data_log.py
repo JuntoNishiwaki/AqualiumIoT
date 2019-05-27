@@ -10,6 +10,7 @@ import pandas as pd
 import wiringpi as wp
 import RPi.GPIO as GPIO
 import os
+from subprocess import Popen
 import sys
 import time
 
@@ -22,8 +23,8 @@ fan_state = 'OFF'
 airc_state = 'OFF'
 
 #図作成＆定点撮影＆エビカウント起動
-os.system('python ./ebi-countor.py')
-os.system('python ./fig_make.py')
+Popen('python ./ebi-countor.py', shell = True)
+Popen('python ./fig_make.py',shell = True)
 
 # 臭気センサーの初期設
 SPI_CH = 0
