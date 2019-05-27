@@ -369,7 +369,8 @@ while  True:
                     f = False
                 fan_state = 'ON'
             else:
-                GPIO.output(GPIO_list[3], GPIO.LOW)
+                if f == False:
+                    GPIO.output(GPIO_list[3], GPIO.LOW)
                 fan_state = 'OFF'
                 f = True
             
@@ -377,10 +378,11 @@ while  True:
             if wtemp > Airc_start_temp:
                 if a == True:
                     send(airc27on)
-                    a = False
+                a = False
                 airc_state = 'ON'
             else:
-                send(aircoff)
+                if a == False:
+                    send(aircoff)
                 airc_state = 'OFF'
                 a = True
 
