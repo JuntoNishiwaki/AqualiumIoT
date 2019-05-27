@@ -296,16 +296,16 @@ while  True:
             GPIO.output(GPIO_list[1], GPIO.LOW)
             GPIO.output(GPIO_list[2], GPIO.HIGH)
 
-            #扇風機制御
-            if wtemp > Fan_start_temp:
-                if f == True:
-                    GPIO.output(GPIO_list[3], GPIO.HIGH)
-                    f = False
-                fan_state = 'ON'
-            else:
-                GPIO.output(GPIO_list[3], GPIO.LOW)
-                fan_state = 'OFF'
-                f = True
+        #扇風機制御
+        if wtemp > Fan_start_temp:
+            if f == True:
+                GPIO.output(GPIO_list[3], GPIO.HIGH)
+                f = False
+            fan_state = 'ON'
+        else:
+            GPIO.output(GPIO_list[3], GPIO.LOW)
+            fan_state = 'OFF'
+            f = True
             
         #エアコン制御 
         if wtemp > Airc_start_temp:
