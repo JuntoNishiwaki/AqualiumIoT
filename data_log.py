@@ -304,9 +304,7 @@ while  True:
             fdata = fdata.replace("rtrtrt", str(round(temp,1)))
             fdata = fdata.replace("pppp", str(round(press,1)))
             fdata = fdata.replace("hhhh", str(round(humid,1)))
-            fdata = fdata.replace("eeee", str(gas_state))
-            fdata = fdata.replace("ffff", str(fan_state))
-            fdata = fdata.replace("aaaa", str(airc_state))        
+            fdata = fdata.replace("eeee", str(gas_state))    
 
         with open(new_path, "w") as f:
             f.write(fdata)
@@ -354,9 +352,22 @@ while  True:
                 send(aircoff)
                 airc_state = 'OFF'
                 a = True
-        
 
             dlm = initialize_dlm()
+
+            #html編集
+            path = '//var/www/html/index.txt'
+            new_path = '//var/www/html/index.html'
+            with open(path, "r") as f:
+                fdata = f.read()
+                fdata = fdata.replace("wtwtwt", str(round(wtemp,1)))
+                fdata = fdata.replace("rtrtrt", str(round(temp,1)))
+                fdata = fdata.replace("pppp", str(round(press,1)))
+                fdata = fdata.replace("hhhh", str(round(humid,1)))
+                fdata = fdata.replace("eeee", str(gas_state))
+                fdata = fdata.replace("ffff", str(fan_state))
+                fdata = fdata.replace("aaaa", str(airc_state))        
+
         
             #　1日毎のデータログ
             if day == next_day:
