@@ -16,14 +16,18 @@ import time
 #エアコン＋扇風機の起動温度
 Fan_start_temp = 25.5
 Airc_start_temp = 26
+a = True
+f = True
 fan_state = 'OFF'
 airc_state = 'OFF'
+
+#図作成＆定点撮影＆エビカウント起動
+os.system('python ./ebi-countor.py')
+os.system('python ./fig_make.py')
 
 # 臭気センサーの初期設
 SPI_CH = 0
 PIN_BASE = 64
-a = True
-f = True
 
 #IR用テキスト指定
 airc27on = '`cat ./ADIR01P/airc-cool-27c.txt`'
