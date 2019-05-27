@@ -269,31 +269,7 @@ while  True:
             gas_state = "そろそろ水換え"
         else:
             gas_state = "要水換え"
-        
-        #扇風機制御
-        if wtemp > Fan_start_temp:
-            if f == True:
-                GPIO.output(GPIO_list[3], GPIO.HIGH)
-                f = False
-            fan_state = 'ON'
-        else:
-            if f == False:
-                GPIO.output(GPIO_list[3], GPIO.LOW)
-            fan_state = 'OFF'
-            f = True
-        
-        #エアコン制御 
-        if wtemp > Airc_start_temp:
-            if a == True:
-                send(airc27on)
-                a = False
-            airc_state = 'ON'
-        else:
-            if a == False:
-                send(aircoff)
-            airc_state = 'OFF'
-            a = True
-        
+    
         # 基準値
         GOOD = 60
         BAD = 150
@@ -356,6 +332,29 @@ while  True:
             dlh.to_csv("./"+str(month)+"_"+str(day)+"_date_log.csv", index=False)
             gyo_m = 0
             gyo_h += 1
+
+            #扇風機制御
+            if wtemp > Fan_start_temp:
+                if f == True:
+                    GPIO.output(GPIO_list[3], GPIO.HIGH)
+                    f = False
+                fan_state = 'ON'
+            else:
+                GPIO.output(GPIO_list[3], GPIO.LOW)
+                fan_state = 'OFF'
+                f = True
+            
+            #エアコン制御 
+            if wtemp > Airc_start_temp:
+                if a == True:
+                    send(airc27on)
+                    a = False
+                airc_state = 'ON'
+            else:
+                send(aircoff)
+                airc_state = 'OFF'
+                a = True
+        
 
             dlm = initialize_dlm()
         
