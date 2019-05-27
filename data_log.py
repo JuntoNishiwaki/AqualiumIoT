@@ -296,6 +296,28 @@ while  True:
             GPIO.output(GPIO_list[1], GPIO.LOW)
             GPIO.output(GPIO_list[2], GPIO.HIGH)
 
+            #扇風機制御
+            if wtemp > Fan_start_temp:
+                if f == True:
+                    GPIO.output(GPIO_list[3], GPIO.HIGH)
+                    f = False
+                fan_state = 'ON'
+            else:
+                GPIO.output(GPIO_list[3], GPIO.LOW)
+                fan_state = 'OFF'
+                f = True
+            
+        #エアコン制御 
+        if wtemp > Airc_start_temp:
+            if a == True:
+                send(airc27on)
+                a = False
+            airc_state = 'ON'
+        else:
+            send(aircoff)
+            airc_state = 'OFF'
+            a = True
+
         # LCDへの出力
         lcd.bme(wtemp,temp,humid,press,gas)
         df_write(dlm,gyo_m,'m',wtemp,temp,humid,press,gas)
