@@ -22,10 +22,6 @@ f = True
 fan_state = 'OFF'
 airc_state = 'OFF'
 
-#図作成＆定点撮影＆エビカウント起動
-Popen('python ./ebi-countor.py', shell = True)
-Popen('python ./fig_make.py',shell = True)
-
 # 臭気センサーの初期設
 SPI_CH = 0
 PIN_BASE = 64
