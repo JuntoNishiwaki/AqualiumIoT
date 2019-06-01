@@ -315,8 +315,11 @@ while  True:
             a = True
         """
         # LCDへの出力
+        print wtemp
         if type(wtemp) == 'None':
             wtemp = 25.0
+        print wtemp
+        print type(wtemp)
         lcd.bme(wtemp,temp,humid,press,gas)
         df_write(dlm,gyo_m,'m',wtemp,temp,humid,press,gas)
         gyo_m += 1
