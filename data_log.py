@@ -17,8 +17,6 @@ import time
 #エアコン＋扇風機の起動温度
 Fan_start_temp = 25.5
 Airc_start_temp = 26
-a = True
-f = True
 fan_state = 'OFF'
 airc_state = 'OFF'
 
