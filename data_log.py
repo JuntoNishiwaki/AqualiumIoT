@@ -224,6 +224,8 @@ def send(code):
     os.system('bto_advanced_USBIR_cmd -d' + code)
 
 try :
+    a == True:
+    f == True:
         
     #　再起動時のデータ読み込み
     try:
@@ -329,6 +331,18 @@ try :
                 fan_state = 'OFF'
                 f = True
 
+            #エアコン制御 
+            if wtemp > Airc_start_temp:
+                if a == True:
+                    send(airc27on)
+                a = False
+                airc_state = 'ON'
+            else:
+                if a == False:
+                    send(aircoff)
+                airc_state = 'OFF'
+                a = True
+
             # LCDへの出力
             print wtemp
             if wtemp is None:
@@ -376,18 +390,6 @@ try :
                 gyo_m = 0
                 gyo_h += 1
                 
-                #エアコン制御 
-                if wtemp > Airc_start_temp:
-                    if a == True:
-                        send(airc27on)
-                    a = False
-                    airc_state = 'ON'
-                else:
-                    if a == False:
-                        send(aircoff)
-                    airc_state = 'OFF'
-                    a = True
-
                 dlm = initialize_dlm()
             
                 #　1日毎のデータログ
