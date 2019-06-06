@@ -224,8 +224,12 @@ def send(code):
     os.system('bto_advanced_USBIR_cmd -d' + code)
 
 try :
-    a = True
-    f = True
+    if wtemp > Airc_start_temp:
+        a = True
+        f = True
+    else:
+        a = False
+        f = False
         
     #　再起動時のデータ読み込み
     try:
