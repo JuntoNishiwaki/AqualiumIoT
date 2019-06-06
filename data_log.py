@@ -223,199 +223,203 @@ def gas_detect(PIN_BASE,SPI_CH):
 def send(code):
     os.system('bto_advanced_USBIR_cmd -d' + code)
 
-#try :
-if wtemp > Airc_start_temp:
-    a = True
-else:
-    a = False
-
-if wtemp > Fan_start_temp:
-    f = True
-else:
-    f = False
-    
-#　再起動時のデータ読み込み
-try:
-    day = now.day
-    month = now.month
-    dlh = pd.read_csv("./"+str(month)+"_"+str(day)+"_date_log.csv", sep=",")
-    dld = pd.read_csv("./"+str(month)+"_"+"date_log.csv", sep=",")
-    s_bool = dld['1_Day'] > 0
-    gyo_d = s_bool.sum()
-    print "Reload date log!"
-    
-except:
-    print "No date exist"
-    pass
-
-#　メイン
-while  True:
-    #日時取得
-    now = datetime.datetime.now()
-    sec = now.second
-    min = now.minute
-    hour = now.hour
-    day = now.day
-    month = now.month
-    year = now.year
-    """
-    #　1ヶ月のデータログ
-    if month == next_month:
-        print "LOG DATA SAVE during Month("+str(year)+"_"+str(month)+"_date_log.csv)"
-        dld.to_csv("./"+str(year)+"_"+str(month)+"_date_log.csv", index=False)
-        gyo_d = 0
-        dld = initialize_dld()
-        next_month += 1
-        if next_month == 13:
-            next_month = 1
-        """
-    #　1分毎のデータログ
-    if sec == 10:
-        # 水温の取得
+try :
+    while True:
         wtemp = DS18B20.main() 
-        # 室温、湿度、気圧の取得
-        temp, humid, press = bme.Bme280(0x76, 1).get_data()
-        # 臭気の取得
-        gas = gas_detect(PIN_BASE,SPI_CH)
-        if 60 > gas:
-            gas_state = "良好"
-        elif 150 > gas >= 60:
-            gas_state = "そろそろ水換え"
-        else:
-            gas_state = "要水換え"
+        if wtemp is not None:
+            break
     
-        # 基準値
-        GOOD = 60
-        BAD = 150
-        # 良好
-        if GOOD >= gas:
-            GPIO.output(GPIO_list[0], GPIO.HIGH)
-            GPIO.output(GPIO_list[1], GPIO.LOW)
-            GPIO.output(GPIO_list[2], GPIO.LOW)
-        # そろそろ水換え
-        elif BAD >= gas > GOOD:
-            GPIO.output(GPIO_list[0], GPIO.LOW)
-            GPIO.output(GPIO_list[1], GPIO.HIGH)
-            GPIO.output(GPIO_list[2], GPIO.LOW)
-        # 要水換え
-        else: 
-            GPIO.output(GPIO_list[0], GPIO.LOW)
-            GPIO.output(GPIO_list[1], GPIO.LOW)
-            GPIO.output(GPIO_list[2], GPIO.HIGH)
-        """
-        #扇風機制御
-        if wtemp > Fan_start_temp:
-            if f == True:
-                GPIO.output(GPIO_list[3], GPIO.HIGH)
-                f = False
-            fan_state = 'ON'
-        else:
-            GPIO.output(GPIO_list[3], GPIO.LOW)
-            fan_state = 'OFF'
-            f = True
-            
-        #エアコン制御 
-        if wtemp > Airc_start_temp:
-            if a == True:
-                send(airc27on)
-                a = False
-            airc_state = 'ON'
-        else:
-            send(aircoff)
-            airc_state = 'OFF'
-            a = True
-        """
+    if wtemp > Airc_start_temp:
+        a = True
+    else:
+        a = False
 
-        #扇風機制御
-        if wtemp > Fan_start_temp:
-            if f == True:
-                GPIO.output(GPIO_list[3], GPIO.HIGH)
-                f = False
-            fan_state = 'ON'
-        else:
-            if f == False:
+    if wtemp > Fan_start_temp:
+        f = True
+    else:
+        f = False
+        
+    #　再起動時のデータ読み込み
+    try:
+        day = now.day
+        month = now.month
+        dlh = pd.read_csv("./"+str(month)+"_"+str(day)+"_date_log.csv", sep=",")
+        dld = pd.read_csv("./"+str(month)+"_"+"date_log.csv", sep=",")
+        s_bool = dld['1_Day'] > 0
+        gyo_d = s_bool.sum()
+        print "Reload date log!"
+        
+    except:
+        print "No date exist"
+        pass
+
+    #　メイン
+    while  True:
+        #日時取得
+        now = datetime.datetime.now()
+        sec = now.second
+        min = now.minute
+        hour = now.hour
+        day = now.day
+        month = now.month
+        year = now.year
+        """
+        #　1ヶ月のデータログ
+        if month == next_month:
+            print "LOG DATA SAVE during Month("+str(year)+"_"+str(month)+"_date_log.csv)"
+            dld.to_csv("./"+str(year)+"_"+str(month)+"_date_log.csv", index=False)
+            gyo_d = 0
+            dld = initialize_dld()
+            next_month += 1
+            if next_month == 13:
+                next_month = 1
+            """
+        #　1分毎のデータログ
+        if sec == 10:
+            # 水温の取得
+            wtemp = DS18B20.main() 
+            # 室温、湿度、気圧の取得
+            temp, humid, press = bme.Bme280(0x76, 1).get_data()
+            # 臭気の取得
+            gas = gas_detect(PIN_BASE,SPI_CH)
+            if 60 > gas:
+                gas_state = "良好"
+            elif 150 > gas >= 60:
+                gas_state = "そろそろ水換え"
+            else:
+                gas_state = "要水換え"
+        
+            # 基準値
+            GOOD = 60
+            BAD = 150
+            # 良好
+            if GOOD >= gas:
+                GPIO.output(GPIO_list[0], GPIO.HIGH)
+                GPIO.output(GPIO_list[1], GPIO.LOW)
+                GPIO.output(GPIO_list[2], GPIO.LOW)
+            # そろそろ水換え
+            elif BAD >= gas > GOOD:
+                GPIO.output(GPIO_list[0], GPIO.LOW)
+                GPIO.output(GPIO_list[1], GPIO.HIGH)
+                GPIO.output(GPIO_list[2], GPIO.LOW)
+            # 要水換え
+            else: 
+                GPIO.output(GPIO_list[0], GPIO.LOW)
+                GPIO.output(GPIO_list[1], GPIO.LOW)
+                GPIO.output(GPIO_list[2], GPIO.HIGH)
+            """
+            #扇風機制御
+            if wtemp > Fan_start_temp:
+                if f == True:
+                    GPIO.output(GPIO_list[3], GPIO.HIGH)
+                    f = False
+                fan_state = 'ON'
+            else:
                 GPIO.output(GPIO_list[3], GPIO.LOW)
-            fan_state = 'OFF'
-            f = True
-
-        #エアコン制御 
-        if wtemp > Airc_start_temp:
-            if a == True:
-                send(airc27on)
-            a = False
-            airc_state = 'ON'
-        else:
-            if a == False:
+                fan_state = 'OFF'
+                f = True
+                
+            #エアコン制御 
+            if wtemp > Airc_start_temp:
+                if a == True:
+                    send(airc27on)
+                    a = False
+                airc_state = 'ON'
+            else:
                 send(aircoff)
-            airc_state = 'OFF'
-            a = True
+                airc_state = 'OFF'
+                a = True
+            """
 
-        # LCDへの出力
-        print wtemp
-        if wtemp is None:
-            wtemp = 25.0
-        lcd.bme(wtemp,temp,humid,press,gas)
-        df_write(dlm,gyo_m,'m',wtemp,temp,humid,press,gas)
-        gyo_m += 1
-        PIN_BASE += 2
+            #扇風機制御
+            if wtemp > Fan_start_temp:
+                if f == True:
+                    GPIO.output(GPIO_list[3], GPIO.HIGH)
+                    f = False
+                fan_state = 'ON'
+            else:
+                if f == False:
+                    GPIO.output(GPIO_list[3], GPIO.LOW)
+                fan_state = 'OFF'
+                f = True
 
-        #html編集
-        path = '//var/www/html/index.txt'
-        new_path = '//var/www/html/index.html'
-        with open(path, "r") as f:
-            fdata = f.read()
-            fdata = fdata.replace("wtwtwt", str(round(wtemp,1)))
-            fdata = fdata.replace("rtrtrt", str(round(temp,1)))
-            fdata = fdata.replace("pppp", str(round(press,1)))
-            fdata = fdata.replace("hhhh", str(round(humid,1)))
-            fdata = fdata.replace("eeee", str(gas_state))
-            fdata = fdata.replace("ffff", str(fan_state))
-            fdata = fdata.replace("aaaa", str(airc_state))        
+            #エアコン制御 
+            if wtemp > Airc_start_temp:
+                if a == True:
+                    send(airc27on)
+                a = False
+                airc_state = 'ON'
+            else:
+                if a == False:
+                    send(aircoff)
+                airc_state = 'OFF'
+                a = True
 
-        with open(new_path, "w") as f:
-            f.write(fdata)
+            # LCDへの出力
+            print wtemp
+            if wtemp is None:
+                wtemp = 25.0
+            lcd.bme(wtemp,temp,humid,press,gas)
+            df_write(dlm,gyo_m,'m',wtemp,temp,humid,press,gas)
+            gyo_m += 1
+            PIN_BASE += 2
 
-        """
-        #ライブカメラ制御
-        with picamera.PiCamera() as camera:
-            camera.resolution = (800, 600)
-            camera.start_preview()
-            # 遅延
-            time.sleep(5)
-            camera.capture('/var/www/html/img/live.jpg')
-            if min == 0 and hour == 22:
-                file_name = str(month)+'_'+str(day)
-                camera.capture('/home/pi/img/'+file_name+'.jpg')
-        """
-        #　30分毎のデータログ
-        if min == 0 or min == 30:
-            dlm_a = df_ave(dlm)
-            df_write(dlh,gyo_h,'h',dlm_a[0],dlm_a[1],dlm_a[2], dlm_a[3], dlm_a[4])
-            #Save data log
-            print "LOG DATA SAVE during Hour("+str(month)+"_"+str(day)+"_date_log.csv)"
-            dlh.to_csv("./"+str(month)+"_"+str(day)+"_date_log.csv", index=False)
-            gyo_m = 0
-            gyo_h += 1
-            
-            dlm = initialize_dlm()
-        
-            #　1日毎のデータログ
-            if day == next_day:
-                dlh_a = df_ave(dlh)
-                df_write(dld,gyo_d,'d',dlh_a[0],dlh_a[1],dlh_a[2], dlh_a[3], dlh_a[4])
+            #html編集
+            path = '//var/www/html/index.txt'
+            new_path = '//var/www/html/index.html'
+            with open(path, "r") as f:
+                fdata = f.read()
+                fdata = fdata.replace("wtwtwt", str(round(wtemp,1)))
+                fdata = fdata.replace("rtrtrt", str(round(temp,1)))
+                fdata = fdata.replace("pppp", str(round(press,1)))
+                fdata = fdata.replace("hhhh", str(round(humid,1)))
+                fdata = fdata.replace("eeee", str(gas_state))
+                fdata = fdata.replace("ffff", str(fan_state))
+                fdata = fdata.replace("aaaa", str(airc_state))        
+
+            with open(new_path, "w") as f:
+                f.write(fdata)
+
+            """
+            #ライブカメラ制御
+            with picamera.PiCamera() as camera:
+                camera.resolution = (800, 600)
+                camera.start_preview()
+                # 遅延
+                time.sleep(5)
+                camera.capture('/var/www/html/img/live.jpg')
+                if min == 0 and hour == 22:
+                    file_name = str(month)+'_'+str(day)
+                    camera.capture('/home/pi/img/'+file_name+'.jpg')
+            """
+            #　30分毎のデータログ
+            if min == 0 or min == 30:
+                dlm_a = df_ave(dlm)
+                df_write(dlh,gyo_h,'h',dlm_a[0],dlm_a[1],dlm_a[2], dlm_a[3], dlm_a[4])
                 #Save data log
-                print "LOG DATA SAVE during Day("+str(month)+"_"+str(day)+"_date_log.csv)"
-                dld.to_csv("./"+str(month)+"_"+"date_log.csv", index=False)        
-                gyo_h = 0
-                gyo_d += 1
-                dlh = initialize_dlh()
-                next_day = day + 1
-        
-    time.sleep(1)
-"""   
+                print "LOG DATA SAVE during Hour("+str(month)+"_"+str(day)+"_date_log.csv)"
+                dlh.to_csv("./"+str(month)+"_"+str(day)+"_date_log.csv", index=False)
+                gyo_m = 0
+                gyo_h += 1
+                
+                dlm = initialize_dlm()
+            
+                #　1日毎のデータログ
+                if day == next_day:
+                    dlh_a = df_ave(dlh)
+                    df_write(dld,gyo_d,'d',dlh_a[0],dlh_a[1],dlh_a[2], dlh_a[3], dlh_a[4])
+                    #Save data log
+                    print "LOG DATA SAVE during Day("+str(month)+"_"+str(day)+"_date_log.csv)"
+                    dld.to_csv("./"+str(month)+"_"+"date_log.csv", index=False)        
+                    gyo_h = 0
+                    gyo_d += 1
+                    dlh = initialize_dlh()
+                    next_day = day + 1
+            
+        time.sleep(1)
+    
 except:
     print('Error! Restart after 1min')
     PIN_BASE += 2
     GPIO.cleanup()
     time.sleep(60)
-"""
