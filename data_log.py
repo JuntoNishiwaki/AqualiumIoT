@@ -224,8 +224,8 @@ def send(code):
     os.system('bto_advanced_USBIR_cmd -d' + code)
 
 try :
-    a == True:
-    f == True:
+    a = True
+    f = True
         
     #　再起動時のデータ読み込み
     try:
