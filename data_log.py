@@ -331,7 +331,7 @@ try :
             # LCDへの出力
             print wtemp
             if wtemp is None:
-                wtemp = 25.0
+                break
             lcd.bme(wtemp,temp,humid,press,gas)
             df_write(dlm,gyo_m,'m',wtemp,temp,humid,press,gas)
             gyo_m += 1
