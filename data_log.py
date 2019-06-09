@@ -223,9 +223,11 @@ def send(code):
 
 try :
     while True:
+        """
         wtemp = DS18B20.main() 
         if wtemp is not None:
             break
+        """
     
     if wtemp > Airc_start_temp:
         a = True
