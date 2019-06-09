@@ -222,11 +222,12 @@ def send(code):
     os.system('bto_advanced_USBIR_cmd -d' + code)
 
 try :
+    """
     while True:
         wtemp = DS18B20.main() 
         if wtemp is not None:
             break
-    
+    """
     if wtemp > Airc_start_temp:
         a = True
     else:
@@ -329,9 +330,11 @@ try :
                 a = True
             """
             # LCDへの出力
+            """
             print wtemp
             if wtemp is None:
                 break
+            """
             lcd.bme(wtemp,temp,humid,press,gas)
             df_write(dlm,gyo_m,'m',wtemp,temp,humid,press,gas)
             gyo_m += 1
