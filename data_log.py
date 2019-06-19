@@ -221,7 +221,7 @@ def gas_detect(PIN_BASE,SPI_CH):
 def send(code):
     os.system('bto_advanced_USBIR_cmd -d' + code)
 
-try :
+try:
     """
     while True:
         wtemp = DS18B20.main() 
@@ -419,8 +419,8 @@ try :
             
         time.sleep(1)
     
-    except:
-        print('Error! Restart after 1min')
-        PIN_BASE += 2
-        GPIO.cleanup()
-        time.sleep(60)
+except:
+    print('Error! Restart after 1min')
+    PIN_BASE += 2
+    GPIO.cleanup()
+    time.sleep(60)
