@@ -250,7 +250,7 @@ try:
     gyo_d = s_bool.sum()
     print "Reload date log!"
 
- except:
+except:
     print "No date exist"
     pass
 
