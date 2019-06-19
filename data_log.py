@@ -112,8 +112,6 @@ dld = pd.DataFrame({
     '1_Day': day_log
 })
 
-print "START MONITERING!!"
-
 #　端末での水温、室温、湿度、気圧の表示用
 def print_date(wtemp,temp,humid,press,gas):
     print "###########################"
@@ -222,6 +220,7 @@ def send(code):
     os.system('bto_advanced_USBIR_cmd -d' + code)
 
 try:
+    print "START MONITERING!!"
     """
     while True:
         wtemp = DS18B20.main() 
@@ -255,6 +254,7 @@ try:
 
     #　メイン
     while  True:
+
         #日時取得
         now = datetime.datetime.now()
         sec = now.second
