@@ -421,9 +421,9 @@ while True:
                 
             time.sleep(1)
     
-        except:
-            print('Error! Restart after 1min')
-            PIN_BASE += 2
-            GPIO.cleanup()
-            time.sleep(60)
+    except:
+        print('Error! Restart after 1min')
+        PIN_BASE += 2
+        GPIO.cleanup()
+        time.sleep(60)
     
