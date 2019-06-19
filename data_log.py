@@ -231,14 +231,14 @@ if wtemp is not None:
 """
 wtemp = DS18B20.main() 
 if wtemp > Airc_start_temp:
-a = True
+    a = True
 else:
-a = False
+    a = False
 
 if wtemp > Fan_start_temp:
-f = True
+    f = True
 else:
-f = False
+    f = False
 
 #　再起動時のデータ読み込み
 try:
