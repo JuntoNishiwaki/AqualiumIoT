@@ -242,17 +242,17 @@ else:
 
 #　再起動時のデータ読み込み
 try:
-day = now.day
-month = now.month
-dlh = pd.read_csv("./"+str(month)+"_"+str(day)+"_date_log.csv", sep=",")
-dld = pd.read_csv("./"+str(month)+"_"+"date_log.csv", sep=",")
-s_bool = dld['1_Day'] > 0
-gyo_d = s_bool.sum()
-print "Reload date log!"
+    day = now.day
+    month = now.month
+    dlh = pd.read_csv("./"+str(month)+"_"+str(day)+"_date_log.csv", sep=",")
+    dld = pd.read_csv("./"+str(month)+"_"+"date_log.csv", sep=",")
+    s_bool = dld['1_Day'] > 0
+    gyo_d = s_bool.sum()
+    print "Reload date log!"
 
-except:
-print "No date exist"
-pass
+ except:
+    print "No date exist"
+    pass
 
 #　メイン
 while  True:
