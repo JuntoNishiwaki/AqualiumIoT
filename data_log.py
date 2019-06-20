@@ -15,7 +15,6 @@ import sys
 import time
 import signal
 
-signal.signal(signal.SIGINT, exit_handler)
 
 #エアコン＋扇風機の起動温度
 Fan_start_temp = 25.5
@@ -50,6 +49,18 @@ next_day = now.day + 1
 next_hour = now.hour + 1
 next_month = now.month + 1
 next_year = now.year + 1
+
+def exit_handler(signal, frame):
+        # Ctrl+Cが押されたときにデバイスを初期状態に戻して終了する。
+        print("\nExit")
+        servo.ChangeDutyCycle(2.0)
+        time.sleep(0.5)
+        servo.stop()
+        GPIO.cleanup()
+        sys.exit(0)
+
+# 終了処理用のシグナルハンドラを準備
+signal.signal(signal.SIGINT, exit_handler)
 
 # GPIO使用準備
 GPIO.cleanup()
