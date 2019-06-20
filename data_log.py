@@ -49,6 +49,7 @@ next_month = now.month + 1
 next_year = now.year + 1
 
 # GPIO使用準備
+GPIO.cleanup()
 GPIO_list = [16, 20, 21, 19, 26]
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(GPIO_list, GPIO.OUT)
@@ -221,7 +222,7 @@ def send(code):
 
 while True:
     try:
-
+        GPIO.cleanup()
         print "START MONITERING!!"
         """
         while True:
@@ -425,5 +426,8 @@ while True:
         print('Error! Restart after 1min')
         PIN_BASE += 2
         GPIO.cleanup()
+        GPIO_list = [16, 20, 21, 19, 26]
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(GPIO_list, GPIO.OUT)
         time.sleep(60)
     
