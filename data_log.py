@@ -61,7 +61,6 @@ def exit_handler(signal, frame):
 signal.signal(signal.SIGINT, exit_handler)
 
 # GPIO使用準備
-GPIO.cleanup()
 GPIO_list = [16, 20, 21, 19, 26]
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(GPIO_list, GPIO.OUT)
