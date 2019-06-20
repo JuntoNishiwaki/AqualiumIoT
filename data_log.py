@@ -425,4 +425,5 @@ while True:
         print('Error! Restart after 1min')
         PIN_BASE += 2
         time.sleep(60)
-    
+    finally:
+        GPIO.cleanup()
