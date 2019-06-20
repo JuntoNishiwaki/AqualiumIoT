@@ -53,9 +53,7 @@ next_year = now.year + 1
 def exit_handler(signal, frame):
         # Ctrl+Cが押されたときにデバイスを初期状態に戻して終了する。
         print("\nExit")
-        servo.ChangeDutyCycle(2.0)
         time.sleep(0.5)
-        servo.stop()
         GPIO.cleanup()
         sys.exit(0)
 
