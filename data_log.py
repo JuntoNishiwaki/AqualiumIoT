@@ -13,6 +13,9 @@ import os
 from subprocess import Popen
 import sys
 import time
+import signal
+
+signal.signal(signal.SIGINT, exit_handler)
 
 #エアコン＋扇風機の起動温度
 Fan_start_temp = 25.5
@@ -425,5 +428,4 @@ while True:
         print('Error! Restart after 1min')
         PIN_BASE += 2
         time.sleep(60)
-    finally:
-        GPIO.cleanup()
+    
