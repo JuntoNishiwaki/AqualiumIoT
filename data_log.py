@@ -240,16 +240,6 @@ while True:
         if wtemp is not None:
             break
         """
-        wtemp = DS18B20.main() 
-        if wtemp > Airc_start_temp:
-            a = True
-        else:
-            a = False
-
-        if wtemp > Fan_start_temp:
-            f = True
-        else:
-            f = False
 
         #　再起動時のデータ読み込み
         try:
@@ -320,29 +310,27 @@ while True:
                     GPIO.output(GPIO_list[0], GPIO.LOW)
                     GPIO.output(GPIO_list[1], GPIO.LOW)
                     GPIO.output(GPIO_list[2], GPIO.HIGH)
-                """
+                
                 #扇風機制御
                 if wtemp > Fan_start_temp:
-                    if f == True:
-                        GPIO.output(GPIO_list[3], GPIO.HIGH)
-                        f = False
+                    GPIO.output(GPIO_list[3], GPIO.HIGH)
+                    time.sleep(5)
                     fan_state = 'ON'
                 else:
                     GPIO.output(GPIO_list[3], GPIO.LOW)
+                    time.sleep(5)
                     fan_state = 'OFF'
-                    f = True
                     
                 #エアコン制御 
                 if wtemp > Airc_start_temp:
-                    if a == True:
-                        send(airc27on)
-                        a = False
+                    send(airc27on)
+                    time.sleep(5)
                     airc_state = 'ON'
                 else:
                     send(aircoff)
+                    time.sleep(5)
                     airc_state = 'OFF'
-                    a = True
-                """
+                
                 # LCDへの出力
                 """
                 print wtemp
@@ -392,8 +380,8 @@ while True:
                     gyo_m = 0
                     gyo_h += 1
                     
-                    dlm = initialize_dlm()
-
+                    dlm = initialize_dlm()  
+                    """
                     #扇風機制御
                     if wtemp > Fan_start_temp:
                         if f == True:
@@ -415,6 +403,8 @@ while True:
                         send(aircoff)
                         airc_state = 'OFF'
                         a = True
+                    
+                    """
 
                     #　1日毎のデータログ
                     if day == next_day:
