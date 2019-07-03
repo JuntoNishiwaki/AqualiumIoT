@@ -2,7 +2,7 @@ import subprocess
 from subprocess import Popen 
 from time import sleep
 
-cmd1 = "python ebi-countor.py"
+cmd1 = "python ebi-countor_tmp.py"
 cmd2 = "python fig_make.py"
 cmd3 = "python data_log_tmp.py"
 
