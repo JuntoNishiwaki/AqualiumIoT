@@ -14,8 +14,12 @@ if __name__ == "__main__":
     run2 = Popen(cmd2, shell=True)
     sleep(1)
     print "START DATA LOG"
-    run3= Popen(cmd3,shell=True)
-    run3.wait()
-    sleep(1)
+    
+    while True:
+        run3= Popen(cmd3,shell=True)
+        run3.wait()
+        sleep(1)
+        Popen.terminate()
+    
     print "End monitoring"
-    Popen.terminate()
+    
