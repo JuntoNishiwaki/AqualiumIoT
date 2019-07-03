@@ -18,3 +18,4 @@ if __name__ == "__main__":
     run3.wait()
     sleep(1)
     print "End monitoring"
+    Popen.terminate()
