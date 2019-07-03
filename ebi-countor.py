@@ -15,133 +15,129 @@ org_name = 'live.jpg'
 while  True:
     time.sleep(1)
 
-    try:
-        #現時点の日時
-        #print("now data get!")
-        
-        now = datetime.datetime.now()
+    #現時点の日時
+    #print("now data get!")
+    
+    now = datetime.datetime.now()
 
-        sec = now.second
-        min = now.minute
-        hour = now.hour
-        day = now.day
-        month = now.month
-        week = now.weekday()
+    sec = now.second
+    min = now.minute
+    hour = now.hour
+    day = now.day
+    month = now.month
+    week = now.weekday()
 
-        if sec == 50: #1分ごとに取得
-            #print("Camera!")
+    if sec == 50: #1分ごとに取得
+        #print("Camera!")
 
-            #ライブカメラ制御
-            with picamera.PiCamera() as camera:
-                camera.resolution = (800, 600)
-                
-                #　露出モードとホワイトバランスのモード
-                camera.exposure_mode = 'auto'   #'off', 'auto', 'night', 'backlight'
-                camera.awb_mode = 'sunlight'    #'off', 'auto', 'sunlight', 'cloudy', 'shade'
-                
-                camera.start_preview()
-                # 遅延
-                time.sleep(10)
+        #ライブカメラ制御
+        with picamera.PiCamera() as camera:
+            camera.resolution = (800, 600)
+            
+            #　露出モードとホワイトバランスのモード
+            camera.exposure_mode = 'auto'   #'off', 'auto', 'night', 'backlight'
+            camera.awb_mode = 'sunlight'    #'off', 'auto', 'sunlight', 'cloudy', 'shade'
+            
+            camera.start_preview()
+            # 遅延
+            time.sleep(10)
+            #オリジナル保存先
+            camera.capture(pic_dir+org_name)
+
+            #別途保存先が必要な場合は指定
+            if ( hour == 22 and min == 0 ):
                 #オリジナル保存先
-                camera.capture(pic_dir+org_name)
+                file_name = str(month)+"_"+str(day)
+                print(file_name)
+                camera.capture("/home/pi/img/"+file_name+".jpg")
+                print("Save Today's Pic!")
 
-                #別途保存先が必要な場合は指定
-                if ( hour == 22 and min == 0 ):
-                    #オリジナル保存先
-                    file_name = str(month)+"_"+str(day)
-                    print(file_name)
-                    camera.capture("/home/pi/img/"+file_name+".jpg")
-                    print("Save Today's Pic!")
+            # オリジナルをロード
+            img_org = cv2.imread(pic_dir+org_name)
+            
+            if ( 0 <= week <= 4 and 16 <= hour <= 23 ) or ( 5 <= week <= 6 and 12 <= hour <= 23 ): 
+                # 処理対象をロード
+                img = cv2.imread(pic_dir+org_name)
 
-                # オリジナルをロード
-                img_org = cv2.imread(pic_dir+org_name)
+                #γ調整
+                gamma = 1.0
+
+                # ガンマ値を使って Look up tableを作成。エビ頭部の赤色を検出
+                lookUpTable = np.empty((1,256), np.uint8)
+                for i in range(256):
+                    lookUpTable[0,i] = np.clip(pow(i / 255.0, gamma) * 255.0, 0, 255)
                 
-                if ( 0 <= week <= 4 and 16 <= hour <= 23 ) or ( 5 <= week <= 6 and 12 <= hour <= 23 ): 
-                    # 処理対象をロード
-                    img = cv2.imread(pic_dir+org_name)
+                # Look up tableを使って画像の輝度値を変更
+                img = cv2.LUT(img, lookUpTable)
+                hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV_FULL)
+                h = hsv[:, :, 0]
+                s = hsv[:, :, 1]
 
-                    #γ調整
-                    gamma = 1.0
+                mask = np.zeros(h.shape, dtype=np.uint8)
+                mask[((h < 10) | (h >280)) & (s >130)] = 255
 
-                    # ガンマ値を使って Look up tableを作成。エビ頭部の赤色を検出
-                    lookUpTable = np.empty((1,256), np.uint8)
-                    for i in range(256):
-                        lookUpTable[0,i] = np.clip(pow(i / 255.0, gamma) * 255.0, 0, 255)
-                    
-                    # Look up tableを使って画像の輝度値を変更
-                    img = cv2.LUT(img, lookUpTable)
-                    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV_FULL)
-                    h = hsv[:, :, 0]
-                    s = hsv[:, :, 1]
+                # 前処理
+                #img = cv2.GaussianBlur(img,(3,3),0)
+                #img = cv2.bilateralFilter(img,3,75,75)
+                #img = cv2.blur(img,(5,5))
 
-                    mask = np.zeros(h.shape, dtype=np.uint8)
-                    mask[((h < 10) | (h >280)) & (s >130)] = 255
+                # 輪郭1の出力  
+                img_dst, contours, hierarchy = cv2.findContours(mask, cv2.CHAIN_APPROX_NONE, cv2.CHAIN_APPROX_SIMPLE)
 
-                    # 前処理
-                    #img = cv2.GaussianBlur(img,(3,3),0)
-                    #img = cv2.bilateralFilter(img,3,75,75)
-                    #img = cv2.blur(img,(5,5))
+                # 輪郭2の出力
+                # 輪郭1を膨張させて、エビの位置を取得する。
+                kernel = np.ones((3,3),np.uint8)
+                #img_dst = cv2.erode(img_dst,kernel,iterations = 1)
+                img_dst = cv2.dilate(img_dst,kernel,iterations = 9)
+                img_dst, contours, hierarchy = cv2.findContours(img_dst, 2, 1)
 
-                    # 輪郭1の出力  
-                    img_dst, contours, hierarchy = cv2.findContours(mask, cv2.CHAIN_APPROX_NONE, cv2.CHAIN_APPROX_SIMPLE)
+                # ラベリング処理
+                ret, markers = cv2.connectedComponents(img_dst)
 
-                    # 輪郭2の出力
-                    # 輪郭1を膨張させて、エビの位置を取得する。
-                    kernel = np.ones((3,3),np.uint8)
-                    #img_dst = cv2.erode(img_dst,kernel,iterations = 1)
-                    img_dst = cv2.dilate(img_dst,kernel,iterations = 9)
-                    img_dst, contours, hierarchy = cv2.findContours(img_dst, 2, 1)
+                # ラベリング結果書き出し準備
+                color_src = cv2.cvtColor(img_dst, cv2.COLOR_GRAY2BGR)
+                height, width = img_dst.shape[:2]
+                colors = []
 
-                    # ラベリング処理
-                    ret, markers = cv2.connectedComponents(img_dst)
+                for i in range(1, ret + 1):
+                    colors.append(np.array([random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)]))
 
-                    # ラベリング結果書き出し準備
-                    color_src = cv2.cvtColor(img_dst, cv2.COLOR_GRAY2BGR)
-                    height, width = img_dst.shape[:2]
-                    colors = []
+                # ラベリング処理
+                label = cv2.connectedComponentsWithStats(img_dst)
 
-                    for i in range(1, ret + 1):
-                        colors.append(np.array([random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)]))
+                # オブジェクト情報を項目別に抽出
+                n = label[0] - 1
+                data = np.delete(label[2], 0, 0)
+                center = np.delete(label[3], 0, 0)
 
-                    # ラベリング処理
-                    label = cv2.connectedComponentsWithStats(img_dst)
+                # オブジェクト情報を利用してラベリング結果を画面に表示
+                for i in range(n):
 
-                    # オブジェクト情報を項目別に抽出
-                    n = label[0] - 1
-                    data = np.delete(label[2], 0, 0)
-                    center = np.delete(label[3], 0, 0)
+                    # 各オブジェクトの外接矩形を赤枠で表示
+                    x0 = data[i][0]
+                    y0 = data[i][1]
+                    x1 = data[i][0] + data[i][2]
+                    y1 = data[i][1] + data[i][3]
+                    #cv2.rectangle(img_org, (x0, y0), (x1, y1), (0, 0, 255))
 
-                    # オブジェクト情報を利用してラベリング結果を画面に表示
-                    for i in range(n):
+                    # 各オブジェクトのラベル番号と面積に黄文字で表示
+                    cv2.putText(img_org, "EBI: " +str(i + 1), (x1 - 20, y1 + 15), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255))
+                    #cv2.putText(img_org, "S: " +str(data[i][4]), (x1 - 20, y1 + 30), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 255))
+                    cv2.putText(img_org, "Total: "+str(ret - 1), (20, 580), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255),3)
+                    """
+                    # 各オブジェクトの重心座標をに黄文字で表示
+                    cv2.putText(img_org, "X: " + str(int(center[i][0])), (x1 - 30, y1 + 15), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 255))
+                    cv2.putText(img_org, "Y: " + str(int(center[i][1])), (x1 - 30, y1 + 30), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 255))
+                    """
 
-                        # 各オブジェクトの外接矩形を赤枠で表示
-                        x0 = data[i][0]
-                        y0 = data[i][1]
-                        x1 = data[i][0] + data[i][2]
-                        y1 = data[i][1] + data[i][3]
-                        #cv2.rectangle(img_org, (x0, y0), (x1, y1), (0, 0, 255))
+                #　写真上に輪郭をプロット
+                Result = cv2.drawContours(img_org, contours, -1, (0,255,0), 3)
 
-                        # 各オブジェクトのラベル番号と面積に黄文字で表示
-                        cv2.putText(img_org, "EBI: " +str(i + 1), (x1 - 20, y1 + 15), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255))
-                        #cv2.putText(img_org, "S: " +str(data[i][4]), (x1 - 20, y1 + 30), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 255))
-                        cv2.putText(img_org, "Total: "+str(ret - 1), (20, 580), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255),3)
-                        """
-                        # 各オブジェクトの重心座標をに黄文字で表示
-                        cv2.putText(img_org, "X: " + str(int(center[i][0])), (x1 - 30, y1 + 15), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 255))
-                        cv2.putText(img_org, "Y: " + str(int(center[i][1])), (x1 - 30, y1 + 30), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 255))
-                        """
+                # 表示
+                cv2.imwrite(pic_dir+"ebi_count_result.jpg", Result)
 
-                    #　写真上に輪郭をプロット
-                    Result = cv2.drawContours(img_org, contours, -1, (0,255,0), 3)
-
-                    # 表示
-                    cv2.imwrite(pic_dir+"ebi_count_result.jpg", Result)
-
-                else:
-                    #カウント時間外の画像切り替え
-                    not_ready = cv2.imread(pic_dir+"not_ready.png")
-                    cv2.imwrite(pic_dir+"ebi_count_result.jpg", not_ready)             
+            else:
+                #カウント時間外の画像切り替え
+                not_ready = cv2.imread(pic_dir+"not_ready.png")
+                cv2.imwrite(pic_dir+"ebi_count_result.jpg", not_ready)             
                 
-    except:
-        print('Error! Restart after 5sec')
-        time.sleep(5)
