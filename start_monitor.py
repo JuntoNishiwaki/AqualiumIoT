@@ -19,8 +19,8 @@ if __name__ == "__main__":
         print "START DATA LOG"
 
         run3= Popen(cmd3,shell=True)
-        run3.wait()
-        sleep(1)
+        #run3.wait()
+        sleep(5)
         
         run1.kill()
         run2.kill()
