@@ -24,7 +24,7 @@ if __name__ == "__main__":
         
         run1.kill()
         run2.kill()
-        run3,kill()
+        run3.kill()
 
         print "Restart"
     
