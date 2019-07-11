@@ -22,9 +22,17 @@ if __name__ == "__main__":
         run3.wait()
         sleep(5)
         
-        run1.kill()
-        run2.kill()
-        #run3.kill()
+        try:
+            run1.kill()
+            run2.kill()
+            #run3.kill()
+        except:
+            try:
+                run2.kill()
+                run3.kill()
+            except:
+                run1.kill()
+                run3.kill()
 
         print "Restart"
     
